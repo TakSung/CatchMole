@@ -1,12 +1,12 @@
 from abc import *
-from Common.MoleType import *
+from Common.ObjectType import *
 
 
 class IBoard(metaclass=ABCMeta):
     @abstractmethod
-    def get_state(y: int, x: int) -> ObjectType:
+    def get_state(self, y: int, x: int) -> ObjectType:
         pass
 
     @abstractmethod
-    def raise_mole(y: int, x: int, type: ObjectType) -> None:
+    def raise_mole(self, y: int, x: int, type: ObjectType) -> None:
         pass
