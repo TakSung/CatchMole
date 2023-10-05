@@ -8,5 +8,5 @@ class IRaiseObj(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def try_attack() -> MoleType:
+    def try_attack() -> ObjectType:
         pass

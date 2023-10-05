@@ -1,1 +1,1 @@
-from .MoleType import MoleType
+from .MoleType import ObjectType

@@ -1,10 +1,10 @@
 from abc import *
-from Common.MoleType import MoleType
+from Common.MoleType import ObjectType
 
 
 class IMoleObserver(metaclass=ABCMeta):
     @abstractmethod
-    def update_state(type: MoleType):
+    def update_state(type: ObjectType):
         pass
 
 
