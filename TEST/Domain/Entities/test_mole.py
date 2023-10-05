@@ -4,7 +4,7 @@ import sys
 import threading
 import time
 import random
-from Domain.Entities.mole import Mole
+from Domain.Entities.Mole import Mole
 from Common.ObjectType import ObjectType
 
 
@@ -22,7 +22,8 @@ class test_mole(unittest.TestCase):
     def setUp(self):
         "Hook method for setting up the test fixture before exercising it."
         print('\t', sys._getframe(0).f_code.co_name)
-        self.mole = Mole(0, 0, None)
+        self.timer = 0.1
+        self.mole = Mole(0, 0, None, self.timer)
 
     def tearDown(self):
         "Hook method for deconstructing the test fixture after testing it."
@@ -56,6 +57,32 @@ class test_mole(unittest.TestCase):
         type = self.mole.try_attack()
         self.assertEqual(ObjectType.NONE, type)
         self.assertFalse(self.mole.state)
+
+    def test_auto_lower(self):
+        print('\t\t', sys._getframe(0).f_code.co_name)
+        TYPE = ObjectType.BASIC_MOLE
+        MAX = 10
+        queue = []
+        theads = []
+        results = [ObjectType.NONE]*MAX
+        self.assertTrue(self.mole.state)
+
+        def attack(id: int):
+            time.sleep(random.randint(0, 3)*0.0001)
+            queue.append(id)
+            results[id] = self.mole.try_attack()
+            print(f"({self.mole.state},{id}): {results[id]}; ", end="")
+
+        for i in range(MAX):
+            theads.append(threading.Thread(target=attack, args=(i,)))
+        time.sleep(self.timer)
+
+        for i in range(MAX):
+            theads[i].start()
+
+        for i in range(MAX):
+            theads[i].join()
+        self.assertEqual(set([ObjectType.NONE]), set(results))
 
     def test_threading_try_attack_1(self):
         print('\t\t', sys._getframe(0).f_code.co_name)
@@ -94,7 +121,7 @@ class test_mole(unittest.TestCase):
             if id == -1:
                 time.sleep(0.003)
             else:
-                time.sleep(random.randint(0, 3)*0.001)
+                time.sleep(random.randint(0, 3)*0.00001)
             queue.append(id)
             if id == -1:
                 self.mole.try_lower()
@@ -127,7 +154,7 @@ class test_mole(unittest.TestCase):
 
         def attack_or_lower(id: int):
             if id != -1:
-                time.sleep(random.randint(0, 3)*0.001)
+                time.sleep(random.randint(0, 3)*0.00001)
             queue.append(id)
             if id == -1:
                 self.mole.try_lower()

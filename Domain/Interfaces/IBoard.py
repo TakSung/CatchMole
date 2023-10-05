@@ -1,5 +1,6 @@
 from abc import *
 from Common.ObjectType import *
+from Domain.Interfaces.IRaiseObj import IRaiseObj
 
 
 class IBoard(metaclass=ABCMeta):
@@ -8,5 +9,5 @@ class IBoard(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def raise_mole(self, y: int, x: int, type: ObjectType) -> None:
+    def raise_obj(self, y: int, x: int, type: ObjectType) -> IRaiseObj:
         pass
