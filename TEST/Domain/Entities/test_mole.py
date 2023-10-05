@@ -1,7 +1,10 @@
 import __init__
 import unittest
 import sys
-from Domain.Entities.mole import mole
+import threading
+import time
+import random
+from Domain.Entities.mole import Mole
 from Common.ObjectType import ObjectType
 
 
@@ -19,7 +22,7 @@ class test_mole(unittest.TestCase):
     def setUp(self):
         "Hook method for setting up the test fixture before exercising it."
         print('\t', sys._getframe(0).f_code.co_name)
-        self.mole = mole(0, 0, None)
+        self.mole = Mole(0, 0, None)
 
     def tearDown(self):
         "Hook method for deconstructing the test fixture after testing it."
@@ -53,6 +56,31 @@ class test_mole(unittest.TestCase):
         type = self.mole.try_attack()
         self.assertEqual(ObjectType.NONE, type)
         self.assertFalse(self.mole.state)
+
+    def test_threading_try_attack_1(self):
+        print('\t\t', sys._getframe(0).f_code.co_name)
+        TYPE = ObjectType.BASIC_MOLE
+        MAX = 10
+        queue = []
+        theads = []
+        results = [ObjectType.NONE]*MAX
+
+        def attack(id: int):
+            time.sleep(random.randint(0, 3)*0.001)
+            queue.append(id)
+            results[id] = self.mole.try_attack()
+
+        for i in range(MAX):
+            theads.append(threading.Thread(target=attack, args=(i,)))
+
+        for i in range(MAX):
+            theads[i].start()
+
+        for i in range(MAX):
+            theads[i].join()
+        self.assertEqual(TYPE, results[queue[0]])
+        results[queue[0]] = ObjectType.NONE
+        self.assertEqual(set([ObjectType.NONE]), set(results))
 
 
 if __name__ == '__main__':

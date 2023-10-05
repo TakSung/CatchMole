@@ -5,7 +5,7 @@ from Common.ObjectType import ObjectType
 import threading
 
 
-class mole(IRaiseObj, IMoleSubject):
+class Mole(IRaiseObj, IMoleSubject):
     # 두더지가 생성된 시점부터 일어나 있음 -> state
     def __init__(self, y: int, x: int, observer: IMoleObserver):
         self.state = True  # raise
