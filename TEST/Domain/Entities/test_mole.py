@@ -82,6 +82,74 @@ class test_mole(unittest.TestCase):
         results[queue[0]] = ObjectType.NONE
         self.assertEqual(set([ObjectType.NONE]), set(results))
 
+    def test_threading_try_attack_2(self):
+        print('\t\t', sys._getframe(0).f_code.co_name)
+        TYPE = ObjectType.BASIC_MOLE
+        MAX = 10
+        queue = []
+        theads = []
+        results = [ObjectType.NONE]*MAX
+
+        def attack_or_lower(id: int):
+            if id == -1:
+                time.sleep(0.003)
+            else:
+                time.sleep(random.randint(0, 3)*0.001)
+            queue.append(id)
+            if id == -1:
+                self.mole.try_lower()
+            else:
+                results[id] = self.mole.try_attack()
+
+        for i in range(MAX+1):
+            theads.append(threading.Thread(
+                target=attack_or_lower, args=((i-1),)))
+
+        for i in range(MAX):
+            theads[i].start()
+
+        for i in range(MAX):
+            theads[i].join()
+
+        frist = queue[0]
+        if frist >= 0:
+            self.assertEqual(TYPE, results[frist])
+            results[queue[0]] = ObjectType.NONE
+        self.assertEqual(set([ObjectType.NONE]), set(results))
+
+    def test_threading_try_attack_3(self):
+        print('\t\t', sys._getframe(0).f_code.co_name)
+        TYPE = ObjectType.BASIC_MOLE
+        MAX = 10
+        queue = []
+        theads = []
+        results = [ObjectType.NONE]*MAX
+
+        def attack_or_lower(id: int):
+            if id != -1:
+                time.sleep(random.randint(0, 3)*0.001)
+            queue.append(id)
+            if id == -1:
+                self.mole.try_lower()
+            else:
+                results[id] = self.mole.try_attack()
+
+        for i in range(MAX+1):
+            theads.append(threading.Thread(
+                target=attack_or_lower, args=((i-1),)))
+
+        for i in range(MAX):
+            theads[i].start()
+
+        for i in range(MAX):
+            theads[i].join()
+
+        frist = queue[0]
+        if frist >= 0:
+            self.assertEqual(TYPE, results[frist])
+            results[queue[0]] = ObjectType.NONE
+        self.assertEqual(set([ObjectType.NONE]), set(results))
+
 
 if __name__ == '__main__':
     unittest.main()
