@@ -9,11 +9,9 @@ import time
 class Mole(IRaiseObj, IMoleSubject):
 
     # 두더지가 생성된 시점부터 일어나 있음 -> state
-    def __init__(self, y: int, x: int, observer: IMoleObserver, timer: int = 2):
+    def __init__(self, observer: IMoleObserver, timer: int = 2):
         self.state = True  # raise
         self.type = ObjectType.BASIC_MOLE
-        self.x = x
-        self.y = y
         self.register_observer(observer)
         self.lock = threading.Lock()
 
@@ -41,18 +39,21 @@ class Mole(IRaiseObj, IMoleSubject):
         if self.state:
             result = self.type
             self.state = False
+            self.notify_state()
         self.lock.release()
-        self.notify_state()
 
         return result
+
+    def get_state(self) -> ObjectType:
+        if self.state:
+            return self.type
+        else:
+            return ObjectType.NONE
 
     def notify_state(self) -> None:
         if self.observer == None:
             return
-        if self.state:
-            self.observer.update_state(self.y, self.x, self.type)
-        else:
-            self.observer.update_state(self.y, self.x, ObjectType.NONE)
+        self.observer.update_state(self.get_state())
 
     def register_observer(self, observer: IMoleObserver) -> None:
         self.observer = observer

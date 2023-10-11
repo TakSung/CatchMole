@@ -4,6 +4,10 @@ from Common.ObjectType import *
 
 class IRaiseObj(metaclass=ABCMeta):
     @abstractmethod
+    def get_state(self) -> ObjectType:
+        pass
+
+    @abstractmethod
     def try_lower(self) -> None:
         pass
 

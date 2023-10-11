@@ -31,37 +31,38 @@ class test_mole(unittest.TestCase):
         print('\t', sys._getframe(0).f_code.co_name)
 
     def test_start(self):
-        self.assertEqual(MoleBoard.empty_map(), self.mole_board.board)
-
-        self.mole_board.update_state(0, 1, ObjectType.BASIC_MOLE)
-        mp = MoleBoard.empty_map()
-        mp[0][1] = ObjectType.BASIC_MOLE
-        self.assertEqual(mp, self.mole_board.board)
+        print('\t\t', sys._getframe(0).f_code.co_name)
+        self.assertEqual(MoleBoard.empty_board_state(),
+                         self.mole_board.get_board_state())
+        self.assertEqual(MoleBoard.empty_board_state(),
+                         self.mole_board.get_board_state())
 
     def test_raise_obj_1(self):
         print('\t\t', sys._getframe(0).f_code.co_name)
 
-        mp = MoleBoard.empty_map()
-        self.assertEqual(mp, self.mole_board.board)
+        mp = MoleBoard.empty_board_state()
+        self.assertEqual(mp, self.mole_board.get_board_state())
 
-        self.mole_board.raise_obj(0, 1, ObjectType.BASIC_MOLE)
-        mp[0][1] = ObjectType.BASIC_MOLE
-        self.assertEqual(mp, self.mole_board.board)
+        self.mole_board.raise_obj(0, 0, ObjectType.BASIC_MOLE)
+        mp[0][0] = ObjectType.BASIC_MOLE
+        self.assertEqual(mp, self.mole_board.get_board_state())
 
         time.sleep(self.timer + 0.001)
-        self.assertEqual(MoleBoard.empty_map(), self.mole_board.board)
+        self.assertEqual(MoleBoard.empty_board_state(),
+                         self.mole_board.get_board_state())
 
     def test_raise_obj_2(self):
         print('\t\t', sys._getframe(0).f_code.co_name)
-        mp = MoleBoard.empty_map()
-        self.assertEqual(mp, self.mole_board.board)
+        mp = MoleBoard.empty_board_state()
+        self.assertEqual(mp, self.mole_board.get_board_state())
 
-        mole = self.mole_board.raise_obj(0, 1, ObjectType.BASIC_MOLE)
-        mp[0][1] = ObjectType.BASIC_MOLE
-        self.assertEqual(mp, self.mole_board.board)
+        mole = self.mole_board.raise_obj(0, 0, ObjectType.BASIC_MOLE)
+        mp[0][0] = ObjectType.BASIC_MOLE
+        self.assertEqual(mp, self.mole_board.get_board_state())
 
         result = mole.try_attack()
-        self.assertEqual(MoleBoard.empty_map(), self.mole_board.board)
+        self.assertEqual(MoleBoard.empty_board_state(),
+                         self.mole_board.get_board_state())
         self.assertEqual(ObjectType.BASIC_MOLE, result)
 
 

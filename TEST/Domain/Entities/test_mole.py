@@ -5,6 +5,9 @@ import threading
 import time
 import random
 from Domain.Entities.Mole import Mole
+from Domain.Entities.NoneObject import NoneObject
+from Domain.Entities.MoleBoard import MoleBoard
+from Domain.Entities.ObjFactory import *
 from Common.ObjectType import ObjectType
 
 
@@ -22,8 +25,11 @@ class test_mole(unittest.TestCase):
     def setUp(self):
         "Hook method for setting up the test fixture before exercising it."
         print('\t', sys._getframe(0).f_code.co_name)
+        self.mole_board = MoleBoard()
         self.timer = 0.1
-        self.mole = Mole(0, 0, None, self.timer)
+        self.mole = Mole(None, self.timer)
+        # self.mole = NoneObject()
+        self.mole_board.set_obj(0, 0, self.mole)
 
     def tearDown(self):
         "Hook method for deconstructing the test fixture after testing it."
@@ -31,24 +37,37 @@ class test_mole(unittest.TestCase):
 
     def test_start(self):
         print('\t\t', sys._getframe(0).f_code.co_name)
-        self.assertTrue(self.mole.state)
+        TYPE = self.mole.get_state()
+        self.assertEqual(TYPE,
+                         self.mole_board.get_state(0, 0))
 
     def test_try_lower(self):
         print('\t\t', sys._getframe(0).f_code.co_name)
-        self.assertTrue(self.mole.state)
+        TYPE = self.mole.get_state()
+        self.assertEqual(TYPE,
+                         self.mole_board.get_state(0, 0))
+
         self.mole.try_lower()
         self.assertFalse(self.mole.state)
+        self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
 
     def test_try_attack_1(self):
         print('\t\t', sys._getframe(0).f_code.co_name)
-        self.assertTrue(self.mole.state)
+        TYPE = self.mole.get_state()
+        self.assertEqual(TYPE,
+                         self.mole_board.get_state(0, 0))
+
         type = self.mole.try_attack()
         self.assertEqual(ObjectType.BASIC_MOLE, type)
         self.assertFalse(self.mole.state)
+        self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
 
     def test_try_attack_2(self):
         print('\t\t', sys._getframe(0).f_code.co_name)
-        self.assertTrue(self.mole.state)
+        TYPE = self.mole.get_state()
+        self.assertEqual(TYPE,
+                         self.mole_board.get_state(0, 0))
+
         print('\t\t\t', "try_attack")
         type = self.mole.try_attack()
         self.assertEqual(ObjectType.BASIC_MOLE, type)
@@ -57,10 +76,11 @@ class test_mole(unittest.TestCase):
         type = self.mole.try_attack()
         self.assertEqual(ObjectType.NONE, type)
         self.assertFalse(self.mole.state)
+        self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
 
     def test_auto_lower(self):
         print('\t\t', sys._getframe(0).f_code.co_name)
-        TYPE = ObjectType.BASIC_MOLE
+        TYPE = self.mole.get_state()
         MAX = 10
         queue = []
         theads = []
@@ -71,7 +91,6 @@ class test_mole(unittest.TestCase):
             time.sleep(random.randint(0, 3)*0.0001)
             queue.append(id)
             results[id] = self.mole.try_attack()
-            print(f"({self.mole.state},{id}): {results[id]}; ", end="")
 
         for i in range(MAX):
             theads.append(threading.Thread(target=attack, args=(i,)))
@@ -83,10 +102,11 @@ class test_mole(unittest.TestCase):
         for i in range(MAX):
             theads[i].join()
         self.assertEqual(set([ObjectType.NONE]), set(results))
+        self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
 
     def test_threading_try_attack_1(self):
         print('\t\t', sys._getframe(0).f_code.co_name)
-        TYPE = ObjectType.BASIC_MOLE
+        TYPE = self.mole.get_state()
         MAX = 10
         queue = []
         theads = []
@@ -108,10 +128,11 @@ class test_mole(unittest.TestCase):
         self.assertEqual(TYPE, results[queue[0]])
         results[queue[0]] = ObjectType.NONE
         self.assertEqual(set([ObjectType.NONE]), set(results))
+        self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
 
     def test_threading_try_attack_2(self):
         print('\t\t', sys._getframe(0).f_code.co_name)
-        TYPE = ObjectType.BASIC_MOLE
+        TYPE = self.mole.get_state()
         MAX = 10
         queue = []
         theads = []
@@ -143,10 +164,11 @@ class test_mole(unittest.TestCase):
             self.assertEqual(TYPE, results[frist])
             results[queue[0]] = ObjectType.NONE
         self.assertEqual(set([ObjectType.NONE]), set(results))
+        self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
 
     def test_threading_try_attack_3(self):
         print('\t\t', sys._getframe(0).f_code.co_name)
-        TYPE = ObjectType.BASIC_MOLE
+        TYPE = self.mole.get_state()
         MAX = 10
         queue = []
         theads = []
@@ -176,6 +198,7 @@ class test_mole(unittest.TestCase):
             self.assertEqual(TYPE, results[frist])
             results[queue[0]] = ObjectType.NONE
         self.assertEqual(set([ObjectType.NONE]), set(results))
+        self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
 
 
 if __name__ == '__main__':
