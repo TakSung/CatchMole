@@ -13,9 +13,20 @@ import random
 mole_board = MoleBoard()
 ## 램덤한 위치에 두더지 올리기
 
-## 램덤한 x y 구하기
-xr = random.randrange(0,4)
-yr = random.randrange(0,4)
 
-mole_board.raise_obj(y = yr, x = xr, type = ObjectType.BASIC_MOLE)
-mole_board.print()
+while True:
+    ## 램덤한 xrandom yrandom 구하기
+    xr = random.randrange(0,4)
+    yr = random.randrange(0,4)
+
+    mole_board.raise_obj(yr, xr, type = ObjectType.BASIC_MOLE)
+    
+
+    ##사용자한테 좌표 xplayer yplayer 받기
+    xp = int(input())
+    yp = int(input())
+
+    t = mole_board.try_attack(yp, xp)
+    print(t)
+
+

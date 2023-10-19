@@ -49,6 +49,7 @@ class MoleBoard(IBoard, IMoleObserver):
 
     def update_state(self, type: ObjectType) -> None:
         print("plz implement MoleBoard.update_state.")
+        self.print()
 
     def print(self, tab: int = 2):
         for _ in range(tab):
@@ -69,6 +70,8 @@ class MoleBoard(IBoard, IMoleObserver):
         for _ in range(tab):
             print("\t", end="")
         print("="*(2*self.size[1] + 1))
+
+        
 
 
 # a = random.randrange(0, 3)
