@@ -10,7 +10,7 @@ from Domain.Entities.NoneObject import NoneObject
 
 
 class MoleBoard(IBoard, IMoleObserver):
-    size = (3, 3)
+    size = (4, 4)
 
     def empty_board() -> List[List[IRaiseObj]]:
         return [[NoneObject()]*MoleBoard.size[1] for _ in range(MoleBoard.size[0])]
