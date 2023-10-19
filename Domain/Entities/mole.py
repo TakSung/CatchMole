@@ -9,6 +9,7 @@ import time
 class Mole(IRaiseObj, IMoleSubject):
 
     # 두더지가 생성된 시점부터 일어나 있음 -> state
+    # 두더지가 특정 시간이 지나면 저절로 아래로 내려감
     def __init__(self, observer: IMoleObserver, timer: int = 2):
         self.state = True  # raise
         self.type = ObjectType.BASIC_MOLE
