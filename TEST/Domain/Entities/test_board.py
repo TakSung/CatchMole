@@ -47,8 +47,9 @@ class test_mole(unittest.TestCase):
         mp[0][0] = ObjectType.BASIC_MOLE
         self.assertEqual(mp, self.mole_board.get_board_state())
 
+
         time.sleep(self.timer + 0.001)
-        self.assertEqual(MoleBoard.empty_board_state(),
+        self.assertEqual(MoleBoard.empty_board_state(), 
                          self.mole_board.get_board_state())
 
     def test_raise_obj_2(self):

@@ -1,6 +1,15 @@
-from enum import Enum
+from enum import IntEnum
 
 
-class ObjectType(Enum):
+class ObjectType(IntEnum):
     NONE = 0
     BASIC_MOLE = 1
+
+def get_object_type(i:int) -> ObjectType:
+    for member in ObjectType:
+        if i == int(member):
+            return member
+    return ObjectType.NONE
+
+
+

@@ -5,6 +5,7 @@ from Domain.Interfaces.IRaiseObj import IRaiseObj
 
 
 class IBoard(metaclass=ABCMeta):
+    ## 현재 보드 상태 전부 보여준다.
     @abstractmethod
     def get_board_state(self) -> List[List[ObjectType]]:
         pass
