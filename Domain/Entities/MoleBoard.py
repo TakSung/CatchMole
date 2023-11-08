@@ -3,24 +3,26 @@ from typing import List
 from Domain.Interfaces.IBoard import IBoard
 from Domain.Interfaces.IRaiseObj import IRaiseObj
 from Domain.Interfaces.IMoleObserver import IMoleObserver
+from Domain.Interfaces.IBoardObserver import IBoardObserver, IBoardSubject
 from Common.ObjectType import ObjectType
 
 from Domain.Entities.ObjFactory import *
 from Domain.Entities.NoneObject import NoneObject
 
 
-class MoleBoard(IBoard, IMoleObserver):
+class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
     size = (4, 4)
 
     def empty_board() -> List[List[IRaiseObj]]:
-        return [[NoneObject()]*MoleBoard.size[1] for _ in range(MoleBoard.size[0])]
+        return [[NoneObject()] * MoleBoard.size[1] for _ in range(MoleBoard.size[0])]
 
     def empty_board_state() -> List[List[ObjectType]]:
-        return [[ObjectType.NONE]*MoleBoard.size[1] for _ in range(MoleBoard.size[0])]
+        return [[ObjectType.NONE] * MoleBoard.size[1] for _ in range(MoleBoard.size[0])]
 
     def __init__(self, factory: IObjFactory = ObjFactory()):
         self.board = MoleBoard.empty_board()
         self.factory = factory
+        self.observers: List[IBoardObserver] = []
 
     def get_board_state(self) -> List[List[ObjectType]]:
         ret = []
@@ -48,20 +50,26 @@ class MoleBoard(IBoard, IMoleObserver):
         return self.board[y][x].try_attack()
 
     def update_state(self, type: ObjectType) -> None:
-        print("plz implement MoleBoard.update_state.")
-        self.print()
+        self.notify_board()
+
+    def register_observer(self, observer: IBoardObserver) -> None:
+        self.observers.append(observer)
+
+    def notify_board(self) -> None:
+        for obsv in self.observers:
+            obsv.update_board(self.get_board_state())
 
     def print(self, tab: int = 2):
         for _ in range(tab):
             print("\t", end="")
-        print("="*(2*self.size[1] + 1))
+        print("=" * (2 * self.size[1] + 1))
 
         for i in range(self.size[0]):
             for _ in range(tab):
                 print("\t", end="")
             print(end="|")
             for j in range(self.size[1]):
-                match(self.get_state(i, j)):
+                match (self.get_state(i, j)):
                     case ObjectType.NONE:
                         print("X", end="|")
                     case _:
@@ -69,9 +77,7 @@ class MoleBoard(IBoard, IMoleObserver):
             print()
         for _ in range(tab):
             print("\t", end="")
-        print("="*(2*self.size[1] + 1))
-
-        
+        print("=" * (2 * self.size[1] + 1))
 
 
 # a = random.randrange(0, 3)
@@ -89,6 +95,6 @@ class MoleBoard(IBoard, IMoleObserver):
 # class moleboard(IBoard)
 
 # if __name__ == '__main__':
-    # 1 print board
-    # 2 raise mole and print board
-    # 3 random raise mole and print board
+# 1 print board
+# 2 raise mole and print board
+# 3 random raise mole and print board
