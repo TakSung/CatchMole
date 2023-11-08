@@ -5,7 +5,7 @@ from Common.ObjectType import ObjectType
 
 class IBoardObserver(metaclass=ABCMeta):
     @abstractmethod
-    def update_board(self, type: List[List[ObjectType]]) -> None:
+    def update_board(self, board: List[List[ObjectType]]) -> None:
         pass
 
 

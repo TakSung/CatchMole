@@ -9,27 +9,33 @@ from Domain.Entities.NoneObject import NoneObject
 
 class IObjFactory(metaclass=ABCMeta):
     @abstractmethod
-    def get_obj(self, type: ObjectType, observer: IMoleObserver) -> IRaiseObj:
+    def get_obj(
+        self, y: int, x: int, type: ObjectType, observer: IMoleObserver
+    ) -> IRaiseObj:
         pass
 
 
 class ObjFactory(IObjFactory):
-    def get_obj(self, type: ObjectType, observer: IMoleObserver) -> IRaiseObj:
+    def get_obj(
+        self, y: int, x: int, type: ObjectType, observer: IMoleObserver
+    ) -> IRaiseObj:
         obj = None
         match type:
             case ObjectType.NONE:
                 obj = NoneObject(observer)
             case ObjectType.BASIC_MOLE:
-                obj = Mole(observer)
+                obj = Mole(y, x, observer)
         return obj
 
 
 class TestObjFactory(IObjFactory):
-    def get_obj(self, type: ObjectType, observer: IMoleObserver) -> IRaiseObj:
+    def get_obj(
+        self, y: int, x: int, type: ObjectType, observer: IMoleObserver
+    ) -> IRaiseObj:
         obj = None
         match type:
             case ObjectType.NONE:
                 obj = NoneObject()
             case ObjectType.BASIC_MOLE:
-                obj = Mole(observer, 0.1)
+                obj = Mole(y, x, observer, 0.1)
         return obj

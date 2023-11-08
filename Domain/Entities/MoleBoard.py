@@ -37,7 +37,7 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
         return self.board[y][x].get_state()
 
     def raise_obj(self, y: int, x: int, type: ObjectType) -> IRaiseObj:
-        obj = self.factory.get_obj(type, self)
+        obj = self.factory.get_obj(y, x, type, self)
         self.board[y][x] = obj
         return obj
 
@@ -49,7 +49,7 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
     def try_attack(self, y: int, x: int) -> ObjectType:
         return self.board[y][x].try_attack()
 
-    def update_state(self, type: ObjectType) -> None:
+    def update_state(self, y: int, x: int, type: ObjectType) -> None:
         self.notify_board()
 
     def register_observer(self, observer: IBoardObserver) -> None:
