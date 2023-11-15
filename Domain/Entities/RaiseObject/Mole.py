@@ -7,18 +7,9 @@ import threading
 
 class Mole(IRaiseObj):
     # 두더지가 생성된 시점부터 일어나 있음 -> state
-<<<<<<<< HEAD:Domain/Entities/mole.py
-<<<<<<<<< Temporary merge branch 1
     # 두더지가 특정 시간이 지나면 저절로 아래로 내려감
-    def __init__(self, observer: IMoleObserver, timer: int = 2):
-=========
-    def __init__(self, observer: IMoleObserver, timer: int = 10):
->>>>>>>>> Temporary merge branch 2
-========
     def __init__(self, timer: Union[int,float] = 10):
         # 두더지가 특정 시간이 지나면 저절로 아래로 내려감
-
->>>>>>>> 7d08a72e43e51ca501ea48af77476487c9e85c0c:Domain/Entities/RaiseObject/Mole.py
         self.state = True  # raise
         self.type = ObjectType.BASIC_MOLE
         self.lock = threading.Lock()
