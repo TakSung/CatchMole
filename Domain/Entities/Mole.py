@@ -1,4 +1,5 @@
 import __init__
+from typing import Union
 from Domain.Interfaces.IRaiseObj import IRaiseObj
 from Domain.Interfaces.IMoleObserver import IMoleSubject, IMoleObserver
 from Common.ObjectType import ObjectType
@@ -6,15 +7,13 @@ import threading
 import time
 
 
-class Mole(IRaiseObj, IMoleSubject):
+class Mole(IRaiseObj):
     # 두더지가 생성된 시점부터 일어나 있음 -> state
-    def __init__(self, y: int, x: int, observer: IMoleObserver, timer: int = 10):
+    def __init__(self, timer: Union[int,float] = 10):
         # 두더지가 특정 시간이 지나면 저절로 아래로 내려감
-        self.y = y
-        self.x = x
+
         self.state = True  # raise
         self.type = ObjectType.BASIC_MOLE
-        self.register_observer(observer)
         self.lock = threading.Lock()
 
         def auto_lower():
@@ -22,8 +21,7 @@ class Mole(IRaiseObj, IMoleSubject):
             self.try_lower()
 
         threading.Thread(target=auto_lower).start()
-        self.notify_state()
-
+        
     def try_lower(self) -> None:
         if not self.state:
             return
@@ -33,8 +31,7 @@ class Mole(IRaiseObj, IMoleSubject):
             self.state = False
         self.lock.release()
 
-        self.notify_state()
-
+        
     def try_attack(self) -> ObjectType:
         result = ObjectType.NONE
 
@@ -42,7 +39,6 @@ class Mole(IRaiseObj, IMoleSubject):
         if self.state:
             result = self.type
             self.state = False
-            self.notify_state()
         self.lock.release()
 
         return result
@@ -53,10 +49,4 @@ class Mole(IRaiseObj, IMoleSubject):
         else:
             return ObjectType.NONE
 
-    def notify_state(self) -> None:
-        if self.observer == None:
-            return
-        self.observer.update_state(self.y, self.x, self.get_state())
-
-    def register_observer(self, observer: IMoleObserver) -> None:
-        self.observer = observer
+    

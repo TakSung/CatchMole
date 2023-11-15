@@ -1,4 +1,6 @@
 import __init__
+from icecream import ic
+
 from typing import List
 from Domain.Interfaces.IBoard import IBoard
 from Domain.Interfaces.IRaiseObj import IRaiseObj
@@ -7,22 +9,25 @@ from Domain.Interfaces.IBoardObserver import IBoardObserver, IBoardSubject
 from Common.ObjectType import ObjectType
 
 from Domain.Entities.ObjFactory import *
-from Domain.Entities.NoneObject import NoneObject
+from Domain.Entities.RaiseHole import RaiseHole
 
 
 class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
     size = (4, 4)
 
-    def empty_board() -> List[List[IRaiseObj]]:
-        return [[NoneObject()] * MoleBoard.size[1] for _ in range(MoleBoard.size[0])]
+    def empty_board(mole_observer:IMoleObserver, factory:IObjFactory) -> List[List[RaiseHole]]:
+        return [[RaiseHole(y,x, mole_observer, factory) for x in range(MoleBoard.size[1])] for y in range(MoleBoard.size[0])]
 
     def empty_board_state() -> List[List[ObjectType]]:
         return [[ObjectType.NONE] * MoleBoard.size[1] for _ in range(MoleBoard.size[0])]
 
-    def __init__(self, factory: IObjFactory = ObjFactory()):
-        self.board = MoleBoard.empty_board()
-        self.factory = factory
+    def __init__(self,observers:List[IBoardObserver]=[], factory: IObjFactory = ObjFactory()):
         self.observers: List[IBoardObserver] = []
+        if observers is not None:
+            for obsr in observers:
+                self.register_observer(obsr)
+        self.board = MoleBoard.empty_board(self, factory)
+        self.notify_board()
 
     def get_board_state(self) -> List[List[ObjectType]]:
         ret = []
@@ -37,14 +42,10 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
         return self.board[y][x].get_state()
 
     def raise_obj(self, y: int, x: int, type: ObjectType) -> IRaiseObj:
-        obj = self.factory.get_obj(y, x, type, self)
-        self.board[y][x] = obj
-        return obj
+        return self.board[y][x].set_raise_object_to_type(type)
 
     def set_obj(self, y: int, x: int, obj: IRaiseObj) -> IRaiseObj:
-        obj.register_observer(self)
-        self.board[y][x] = obj
-        return obj
+        return self.board[y][x].set_raise_object_to_raise_obj(obj)
 
     def try_attack(self, y: int, x: int) -> ObjectType:
         return self.board[y][x].try_attack()
@@ -53,9 +54,12 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
         self.notify_board()
 
     def register_observer(self, observer: IBoardObserver) -> None:
-        self.observers.append(observer)
+        if observer is not None:
+            self.observers.append(observer)
 
     def notify_board(self) -> None:
+        if self.observers is None:
+            return
         for obsv in self.observers:
             obsv.update_board(self.get_board_state())
 
