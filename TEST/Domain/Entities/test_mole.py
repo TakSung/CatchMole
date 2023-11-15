@@ -6,9 +6,7 @@ import time
 import random
 from icecream import ic
 
-from Domain.Entities.Mole import Mole
 from Domain.Entities.RaiseHole import RaiseHole
-from Domain.Entities.NoneObject import NoneObject
 from Domain.Entities.MoleBoard import MoleBoard
 from Domain.Entities.ObjFactory import *
 from Common.ObjectType import ObjectType
