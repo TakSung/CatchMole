@@ -76,6 +76,8 @@ class GUI_Printer(IBoardObserver):
         game_initiating_window()
         for mole in moles:
             screen.blit(mole_image, mole)
+        text_surface = my_font.render(f'Score : {score}', False, (0, 0, 0))
+        screen.blit(text_surface, (0,0))
         pg.display.update()
         clock.tick(30)
             
@@ -91,11 +93,12 @@ def convert_score(type: ObjectType)->int:
         case _:
             return 0
 
-board = MoleBoard(observers=[GUI_Printer()],factory=TestObjFactory(100))
+board = MoleBoard(observers=[GUI_Printer()],factory=TestObjFactory(1))
 for y in range(3):
     for x in range(3):
         board.raise_obj(y,x, type=ObjectType.BASIC_MOLE)
 while True:
+    t=ObjectType.NONE
     event = pg.event.poll() #이벤트 처리
     if event.type == QUIT:
         pg.quit()
@@ -106,8 +109,25 @@ while True:
         yr = random.randrange(0, 3)
         ic(xr, yr)
         board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
-        
-        
+        if event.key == K_KP7:
+            t = board.try_attack(0,0)
+        elif event.key == K_KP8:
+            t = board.try_attack(0,1)
+        elif event.key == K_KP9:
+            t = board.try_attack(0,2)
+        elif event.key == K_KP4:
+            t = board.try_attack(1,0)
+        elif event.key == K_KP5:
+            t = board.try_attack(1,1)
+        elif event.key == K_KP6:
+            t = board.try_attack(1,2)
+        elif event.key == K_KP1:
+            t = board.try_attack(2,0)
+        elif event.key == K_KP2:
+            t = board.try_attack(2,1)
+        elif event.key == K_KP3:
+            t = board.try_attack(2,2)
+    score += convert_score(t)
     text_surface = my_font.render(f'Score : {score}', False, (0, 0, 0))
     screen.blit(text_surface, (0,0))
     pg.display.update()
