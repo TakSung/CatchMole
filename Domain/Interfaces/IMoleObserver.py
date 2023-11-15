@@ -4,7 +4,7 @@ from Common.ObjectType import ObjectType
 
 class IMoleObserver(metaclass=ABCMeta):
     @abstractmethod
-    def update_state(self, type: ObjectType) -> None:
+    def update_state(self, y: int, x: int, type: ObjectType) -> None:
         pass
 
 
