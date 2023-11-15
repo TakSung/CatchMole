@@ -80,7 +80,16 @@ class GUI_Printer(IBoardObserver):
         clock.tick(30)
             
 board = MoleBoard(observers=[GUI_Printer()])
-
+pg.font.init() # you have to call this at the start, 
+                   # if you want to use this module.
+my_font = pg.font.SysFont('Comic Sans MS', 30)
+score = 0
+def convert_score(type: ObjectType)->int:
+    match type:
+        case ObjectType.BASIC_MOLE:
+            return 1
+        case _:
+            return 0
 
 while True:
     event = pg.event.poll() #이벤트 처리
@@ -94,10 +103,10 @@ while True:
         ic(xr, yr)
         board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
         
+        
+    text_surface = my_font.render(f'Score : {score}', False, (0, 0, 0))
+    screen.blit(text_surface, (0,0))
     pg.display.update()
     clock.tick(30)
-
-    
-    
 
 pg.quit() 
