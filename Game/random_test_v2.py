@@ -79,9 +79,10 @@ class GUI_Printer(IBoardObserver):
         pg.display.update()
         clock.tick(30)
             
-board = MoleBoard(observers=[GUI_Printer()])
-
-
+board = MoleBoard(observers=[GUI_Printer()],factory=TestObjFactory(100))
+for y in range(3):
+    for x in range(3):
+        board.raise_obj(y,x, type=ObjectType.BASIC_MOLE)
 while True:
     event = pg.event.poll() #이벤트 처리
     if event.type == QUIT:
@@ -93,6 +94,24 @@ while True:
         yr = random.randrange(0, 3)
         ic(xr, yr)
         board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
+        if event.key == K_KP7:
+            t = board.try_attack(0,0)
+        elif event.key == K_KP8:
+            t = board.try_attack(0,1)
+        elif event.key == K_KP9:
+            t = board.try_attack(0,2)
+        elif event.key == K_KP4:
+            t = board.try_attack(1,0)
+        elif event.key == K_KP5:
+            t = board.try_attack(1,1)
+        elif event.key == K_KP6:
+            t = board.try_attack(1,2)
+        elif event.key == K_KP1:
+            t = board.try_attack(2,0)
+        elif event.key == K_KP2:
+            t = board.try_attack(2,1)
+        elif event.key == K_KP3:
+            t = board.try_attack(2,2)
         
     pg.display.update()
     clock.tick(30)
