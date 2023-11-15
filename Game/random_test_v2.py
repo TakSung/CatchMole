@@ -26,7 +26,7 @@ line_color = (0, 0, 0)
 mole_image = pg.image.load('mole.png')
 mole_image = pg.transform.scale(mole_image, (240, 200))
  
-
+ 
 # pg.init()
  
 fps = 30
