@@ -3,6 +3,8 @@ import unittest
 import sys
 import time
 import random
+from icecream import ic
+
 from Common.ObjectType import ObjectType
 from Domain.Interfaces.IRaiseObj import IRaiseObj
 from Domain.Entities.ObjFactory import *
@@ -14,6 +16,7 @@ class test_mole(unittest.TestCase):
     def setUpClass(cls):
         cls.driver = 'test'
         print(sys._getframe(0).f_code.co_name)
+        ic.disable()
 
     @classmethod
     def tearDownClass(cls):
@@ -24,7 +27,7 @@ class test_mole(unittest.TestCase):
         "Hook method for setting up the test fixture before exercising it."
         print('\t', sys._getframe(0).f_code.co_name)
         self.timer = 0.101
-        self.mole_board = MoleBoard(TestObjFactory())
+        self.mole_board = MoleBoard(factory=TestObjFactory())
 
     def tearDown(self):
         "Hook method for deconstructing the test fixture after testing it."

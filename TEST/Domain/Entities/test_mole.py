@@ -4,7 +4,10 @@ import sys
 import threading
 import time
 import random
+from icecream import ic
+
 from Domain.Entities.Mole import Mole
+from Domain.Entities.RaiseHole import RaiseHole
 from Domain.Entities.NoneObject import NoneObject
 from Domain.Entities.MoleBoard import MoleBoard
 from Domain.Entities.ObjFactory import *
@@ -16,6 +19,7 @@ class test_mole(unittest.TestCase):
     def setUpClass(cls):
         cls.driver = "test"
         print(sys._getframe(0).f_code.co_name)
+        ic.disable()
 
     @classmethod
     def tearDownClass(cls):
@@ -27,7 +31,8 @@ class test_mole(unittest.TestCase):
         print("\t", sys._getframe(0).f_code.co_name)
         self.mole_board = MoleBoard()
         self.timer = 0.1
-        self.mole = Mole(0, 0, None, self.timer)
+        self.mole = RaiseHole(0, 0, self.mole_board, TestObjFactory())
+        self.mole.set_raise_object_to_type(ObjectType.BASIC_MOLE)
         # self.mole = NoneObject()
         self.mole_board.set_obj(0, 0, self.mole)
 
@@ -46,7 +51,6 @@ class test_mole(unittest.TestCase):
         self.assertEqual(TYPE, self.mole_board.get_state(0, 0))
 
         self.mole.try_lower()
-        self.assertFalse(self.mole.state)
         self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
 
     def test_try_attack_1(self):
@@ -56,22 +60,21 @@ class test_mole(unittest.TestCase):
 
         type = self.mole.try_attack()
         self.assertEqual(ObjectType.BASIC_MOLE, type)
-        self.assertFalse(self.mole.state)
         self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
 
     def test_try_attack_2(self):
+        from icecream import ic
         print("\t\t", sys._getframe(0).f_code.co_name)
         TYPE = self.mole.get_state()
         self.assertEqual(TYPE, self.mole_board.get_state(0, 0))
 
         print("\t\t\t", "try_attack")
+        ic(self.mole, self.mole.get_state())
         type = self.mole.try_attack()
         self.assertEqual(ObjectType.BASIC_MOLE, type)
-        self.assertFalse(self.mole.state)
         print("\t\t\t", "re try_attack")
         type = self.mole.try_attack()
         self.assertEqual(ObjectType.NONE, type)
-        self.assertFalse(self.mole.state)
         self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
 
     def test_auto_lower(self):
@@ -81,7 +84,6 @@ class test_mole(unittest.TestCase):
         queue = []
         theads = []
         results = [ObjectType.NONE] * MAX
-        self.assertTrue(self.mole.state)
 
         def attack(id: int):
             time.sleep(random.randint(0, 3) * 0.0001)
