@@ -128,8 +128,6 @@ while True:
         elif event.key == K_KP3:
             t = board.try_attack(2,2)
     score += convert_score(t)
-    text_surface = my_font.render(f'Score : {score}', False, (0, 0, 0))
-    screen.blit(text_surface, (0,0))
     pg.display.update()
     clock.tick(30)
 
