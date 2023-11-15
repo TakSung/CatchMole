@@ -3,8 +3,7 @@ from Domain.Interfaces.IRaiseObj import IRaiseObj
 from Domain.Interfaces.IMoleObserver import IMoleObserver
 from Common.ObjectType import ObjectType
 
-from Domain.Entities.Mole import Mole
-from Domain.Entities.NoneObject import NoneObject
+from Domain.Entities.RaiseObject import *
 
 
 class IObjFactory(metaclass=ABCMeta):

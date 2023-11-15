@@ -42,10 +42,14 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
         return self.board[y][x].get_state()
 
     def raise_obj(self, y: int, x: int, type: ObjectType) -> IRaiseObj:
-        return self.board[y][x].set_raise_object_to_type(type)
+        ret = self.board[y][x].set_raise_object_to_type(type)
+        self.notify_board()
+        return ret 
 
     def set_obj(self, y: int, x: int, obj: IRaiseObj) -> IRaiseObj:
-        return self.board[y][x].set_raise_object_to_raise_obj(obj)
+        ret = self.board[y][x].set_raise_object_to_raise_obj(obj)
+        self.notify_board()
+        return ret
 
     def try_attack(self, y: int, x: int) -> ObjectType:
         return self.board[y][x].try_attack()
