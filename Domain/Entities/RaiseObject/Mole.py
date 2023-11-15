@@ -4,8 +4,6 @@ from Domain.Interfaces.IRaiseObj import IRaiseObj
 from Domain.Interfaces.IMoleObserver import IMoleSubject, IMoleObserver
 from Common.ObjectType import ObjectType
 import threading
-import time
-
 
 class Mole(IRaiseObj):
     # 두더지가 생성된 시점부터 일어나 있음 -> state
@@ -15,12 +13,7 @@ class Mole(IRaiseObj):
         self.state = True  # raise
         self.type = ObjectType.BASIC_MOLE
         self.lock = threading.Lock()
-
-        def auto_lower():
-            time.sleep(timer)
-            self.try_lower()
-
-        threading.Thread(target=auto_lower).start()
+        self.set_timer(timer)
         
     def try_lower(self) -> None:
         if not self.state:
