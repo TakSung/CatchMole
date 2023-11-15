@@ -14,14 +14,18 @@ white = (255, 255, 255)
 line_color = (0, 0, 0)
 
 mole_image = pg.image.load('mole.png')
+mole_image = pg.transform.scale(mole_image,(230, 200))
 moles = []
-padding = 15
-for i in range(0,3):
-    for j in range(0,3):
-        mole = mole_image.get_rect(left = width/3*i-padding, top = height/3*j)
-        moles.append(mole)  
- 
+# for i in range(0,3):
+#     for j in range(0,3):
+#         mole = mole_image.get_rect(left = width/3*i+20, top = height/3*j+35)
+#         moles.append(mole) 
 
+def draw_mole(i, j):
+    mole = mole_image.get_rect(left = width/3*i+20, top = height/3*j+35)
+    moles.append(mole)
+ 
+ 
 # pg.init()
  
 fps = 30
@@ -60,6 +64,9 @@ while True:
     if event.type == QUIT:
         pg.quit()
         sys.exit()
+    elif event.type == KEYDOWN:
+        if event.type == K_a :
+            draw_mole(1,1)
     # elif event.type == KEYDOWN: # 키 입력시 키에 따른 공 위치 변화
     #     if event.key == K_LEFT:
     #         pass
