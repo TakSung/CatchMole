@@ -79,6 +79,18 @@ class GUI_Printer(IBoardObserver):
         pg.display.update()
         clock.tick(30)
             
+
+pg.font.init() # you have to call this at the start, 
+                   # if you want to use this module.
+my_font = pg.font.SysFont('Comic Sans MS', 30)
+score = 0
+def convert_score(type: ObjectType)->int:
+    match type:
+        case ObjectType.BASIC_MOLE:
+            return 1
+        case _:
+            return 0
+
 board = MoleBoard(observers=[GUI_Printer()],factory=TestObjFactory(100))
 for y in range(3):
     for x in range(3):
@@ -94,29 +106,11 @@ while True:
         yr = random.randrange(0, 3)
         ic(xr, yr)
         board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
-        if event.key == K_KP7:
-            t = board.try_attack(0,0)
-        elif event.key == K_KP8:
-            t = board.try_attack(0,1)
-        elif event.key == K_KP9:
-            t = board.try_attack(0,2)
-        elif event.key == K_KP4:
-            t = board.try_attack(1,0)
-        elif event.key == K_KP5:
-            t = board.try_attack(1,1)
-        elif event.key == K_KP6:
-            t = board.try_attack(1,2)
-        elif event.key == K_KP1:
-            t = board.try_attack(2,0)
-        elif event.key == K_KP2:
-            t = board.try_attack(2,1)
-        elif event.key == K_KP3:
-            t = board.try_attack(2,2)
         
+        
+    text_surface = my_font.render(f'Score : {score}', False, (0, 0, 0))
+    screen.blit(text_surface, (0,0))
     pg.display.update()
     clock.tick(30)
-
-    
-    
 
 pg.quit() 
