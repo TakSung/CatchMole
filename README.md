@@ -5,6 +5,8 @@ This is a whack-a-mole discussion project in python.
 
 ```bash
 git clone https://github.com/TakSung/CatchMole.git
+cd CatchMole
+pip install -r requirements.txt
 ```
 
 # Test
