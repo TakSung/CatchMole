@@ -3,39 +3,34 @@ from Domain.Interfaces.IRaiseObj import IRaiseObj
 from Domain.Interfaces.IMoleObserver import IMoleObserver
 from Common.ObjectType import ObjectType
 
-from Domain.Entities.Mole import Mole
-from Domain.Entities.NoneObject import NoneObject
+from Domain.Entities.RaiseObject import *
 
 
 class IObjFactory(metaclass=ABCMeta):
     @abstractmethod
-    def get_obj(
-        self, y: int, x: int, type: ObjectType, observer: IMoleObserver
-    ) -> IRaiseObj:
+    def get_obj(self,type: ObjectType) -> IRaiseObj:
         pass
 
 
 class ObjFactory(IObjFactory):
-    def get_obj(
-        self, y: int, x: int, type: ObjectType, observer: IMoleObserver
-    ) -> IRaiseObj:
-        obj = None
-        match type:
-            case ObjectType.NONE:
-                obj = NoneObject(observer)
-            case ObjectType.BASIC_MOLE:
-                obj = Mole(y, x, observer)
-        return obj
-
-
-class TestObjFactory(IObjFactory):
-    def get_obj(
-        self, y: int, x: int, type: ObjectType, observer: IMoleObserver
-    ) -> IRaiseObj:
+    def get_obj(self, type: ObjectType) -> IRaiseObj:
         obj = None
         match type:
             case ObjectType.NONE:
                 obj = NoneObject()
             case ObjectType.BASIC_MOLE:
-                obj = Mole(y, x, observer, 0.1)
+                obj = Mole()
+        return obj
+
+
+class TestObjFactory(IObjFactory):
+    def __init__(self, time=0.1):
+        self.time=time
+    def get_obj(self,type: ObjectType) -> IRaiseObj:
+        obj = None
+        match type:
+            case ObjectType.NONE:
+                obj = NoneObject()
+            case ObjectType.BASIC_MOLE:
+                obj = Mole(self.time)
         return obj

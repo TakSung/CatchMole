@@ -30,10 +30,8 @@ class BoardPrinter(IBoardObserver):
             print()
         print(" ", "=" * (2 * cols + 1), sep="")
 
-
-mole_board = MoleBoard()
 printer = BoardPrinter()
-mole_board.register_observer(printer)
+mole_board = MoleBoard(observers=[printer])
 ## 램덤한 위치에 두더지 올리기
 
 while True:
@@ -44,8 +42,12 @@ while True:
     mole_board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
 
     ##사용자한테 좌표 xplayer yplayer 받기
-    xp = int(input())
-    yp = int(input())
+    try:
+        xp = int(input("input x:"))
+        yp = int(input("input y:"))
+    except ValueError as ve:
+        print("다시 입력해 주세요.")
+        continue
 
     t = mole_board.try_attack(yp, xp)
-    print(t)
+    print("catch :",t.name)
