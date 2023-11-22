@@ -29,7 +29,7 @@ class test_mole(unittest.TestCase):
         print("\t", sys._getframe(0).f_code.co_name)
         self.mole_board = MoleBoard()
         self.timer = 0.1
-        self.mole = RaiseHole(0, 0, self.mole_board, TestObjFactory())
+        self.mole = RaiseHole(0, 0, [self.mole_board], TestObjFactory())
         self.mole.set_raise_object_to_type(ObjectType.BASIC_MOLE)
         # self.mole = NoneObject()
         self.mole_board.set_obj(0, 0, self.mole)

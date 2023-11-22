@@ -1,7 +1,9 @@
+from abc import ABCMeta
 import __init__
 from icecream import ic
 
 from typing import List
+from collections.abc import Collection
 from Domain.Interfaces.IBoard import IBoard
 from Domain.Interfaces.IRaiseObj import IRaiseObj
 from Domain.Interfaces.IMoleObserver import IMoleObserver
@@ -15,18 +17,16 @@ from Domain.Entities.RaiseHole import RaiseHole
 class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
     size = (4, 4)
 
-    def empty_board(mole_observer:IMoleObserver, factory:IObjFactory) -> List[List[RaiseHole]]:
-        return [[RaiseHole(y,x, mole_observer, factory) for x in range(MoleBoard.size[1])] for y in range(MoleBoard.size[0])]
+    def empty_board(mole_observers:Collection[IMoleObserver], factory:IObjFactory) -> List[List[RaiseHole]]:
+        return [[RaiseHole(y,x, mole_observers, factory) for x in range(MoleBoard.size[1])] for y in range(MoleBoard.size[0])]
 
     def empty_board_state() -> List[List[ObjectType]]:
         return [[ObjectType.NONE] * MoleBoard.size[1] for _ in range(MoleBoard.size[0])]
 
     def __init__(self,observers:List[IBoardObserver]=[], factory: IObjFactory = ObjFactory()):
         self.observers: List[IBoardObserver] = []
-        if observers is not None:
-            for obsr in observers:
-                self.register_observer(obsr)
-        self.board = MoleBoard.empty_board(self, factory)
+        self.register_observers(observers)
+        self.board = MoleBoard.empty_board([self], factory)
         self.notify_board()
 
     def get_board_state(self) -> List[List[ObjectType]]:
@@ -56,10 +56,20 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
 
     def update_state(self, y: int, x: int, type: ObjectType) -> None:
         self.notify_board()
+        
+    def register_mole_observers(self, observers: Collection[IMoleObserver])->None:
+        if self.board is None:
+            raise ValueError("MoleBoard NotExistBoard")
+        
+        for line in self.board:
+            for raise_hole in line:
+                raise_hole.register_observers(observers)
 
-    def register_observer(self, observer: IBoardObserver) -> None:
-        if observer is not None:
-            self.observers.append(observer)
+    def register_observers(self, observers: Collection[IBoardObserver]) -> None:
+        if observers is None:
+            raise ValueError("MoleBoard in register_observers")
+        for obsr in observers:
+            self.observers.append(obsr)
 
     def notify_board(self) -> None:
         if self.observers is None:

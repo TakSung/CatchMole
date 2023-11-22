@@ -1,4 +1,5 @@
 from abc import *
+from collections.abc import Collection
 from Common.ObjectType import ObjectType
 
 
@@ -14,5 +15,5 @@ class IMoleSubject(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def register_observer(self, observer: IMoleObserver) -> None:
+    def register_observers(self, observers: Collection[IMoleObserver]) -> None:
         pass

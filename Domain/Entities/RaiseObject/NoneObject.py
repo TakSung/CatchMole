@@ -1,6 +1,5 @@
 import __init__
 from Domain.Interfaces.IRaiseObj import IRaiseObj
-from Domain.Interfaces.IMoleObserver import IMoleSubject, IMoleObserver
 from Common.ObjectType import ObjectType
 
 

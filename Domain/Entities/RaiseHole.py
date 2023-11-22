@@ -1,5 +1,6 @@
 import __init__
 from typing import List
+from collections.abc import Collection
 import time
 
 
@@ -12,13 +13,13 @@ from Common.ObjectType import ObjectType
 
 class RaiseHole(IRaiseObj, IMoleSubject):
     
-    def __init__(self, y: int, x: int, observer: IMoleObserver=None, factory:IObjFactory = ObjFactory()):
+    def __init__(self, y: int, x: int, observers: Collection[IMoleObserver]=[], factory:IObjFactory = ObjFactory()):
         self.y = y
         self.x = x
         self.raise_obj = NoneObject()
         self.observers:List[IMoleObserver] = []
         self.factory = factory
-        self.register_observer(observer)
+        self.register_observers(observers)
     
     def set_none_object(self)->IRaiseObj:
         if not isinstance(self.raise_obj, NoneObject):
@@ -41,7 +42,6 @@ class RaiseHole(IRaiseObj, IMoleSubject):
         threading.Thread(target=auto_lower).start()
 
     def set_raise_object_to_type(self, object_type:ObjectType)->IRaiseObj:
-        from icecream import ic
         '''
         raise_obj가 NoneObject이면 object_type으로 객체 생성
         '''
@@ -61,9 +61,11 @@ class RaiseHole(IRaiseObj, IMoleSubject):
         for obsv in self.observers:
             obsv.update_state(self.y, self.x, self.get_state())
 
-    def register_observer(self, observer: IMoleObserver) -> None:
-        if observer is not None:
-            self.observers.append(observer)
+    def register_observers(self, observers: Collection[IMoleObserver]) -> None:
+        if observers is None:
+            raise ValueError("RaiseHole in register_observers")
+        for obsr in observers:
+            self.observers.append(obsr)
 
     ## 일어나 있을 때 자신의 상태를 알려준다.
     def get_state(self) -> ObjectType:

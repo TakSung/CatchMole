@@ -1,5 +1,6 @@
 from abc import *
 from typing import List
+from collections.abc import Collection
 from Common.ObjectType import ObjectType
 
 
@@ -15,5 +16,5 @@ class IBoardSubject(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def register_observer(self, observer: IBoardObserver) -> None:
+    def register_observers(self, observers: Collection[IBoardObserver]) -> None:
         pass
