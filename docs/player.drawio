@@ -1,55 +1,93 @@
 <mxfile host="65bd71144e">
     <diagram id="w8MqeWq_J6Iqn1tJmQ6n" name="Page-1">
-        <mxGraphModel dx="1096" dy="482" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1050" dy="571" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="17" value="attack" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="2" target="14">
+                <mxCell id="17" value="attack" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="2" target="14" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="2" value="player A" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="280" y="210" width="30" height="60" as="geometry"/>
+                <mxCell id="2" value="player A" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="335" y="410" width="30" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="11" value="상태전파" style="edgeStyle=none;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.75;entryY=0.1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="3" target="2">
+                <mxCell id="11" value="상태전파" style="edgeStyle=none;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.75;entryY=0.1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="3" target="2" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
-                            <mxPoint x="300" y="140"/>
+                            <mxPoint x="355" y="340"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="3" value="manager" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="360" y="60" width="30" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="6" value="player B" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="440" y="210" width="30" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="12" value="점수계산&lt;br&gt;종료판단&lt;br&gt;플레이어 상태판단" style="edgeStyle=none;html=1;exitX=0.25;exitY=0.1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.75;entryY=0.1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="3" target="3">
-                    <mxGeometry relative="1" as="geometry">
-                        <Array as="points">
-                            <mxPoint x="350" y="40"/>
-                            <mxPoint x="375" y="20"/>
-                            <mxPoint x="400" y="40"/>
-                        </Array>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="13" value="key 조작&lt;br&gt;커서조작" style="edgeStyle=none;html=1;exitX=0;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="2" target="2">
-                    <mxGeometry relative="1" as="geometry">
-                        <Array as="points">
-                            <mxPoint x="260" y="220"/>
-                            <mxPoint x="240" y="240"/>
-                            <mxPoint x="250" y="260"/>
-                            <mxPoint x="270" y="260"/>
-                        </Array>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="15" value="잡은유닛" style="edgeStyle=none;html=1;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="14" target="3">
+                <mxCell id="19" style="edgeStyle=none;html=1;" parent="1" source="3" target="24" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="14" value="board" style="html=1;" vertex="1" parent="1">
-                    <mxGeometry x="250" y="380" width="110" height="50" as="geometry"/>
+                <mxCell id="21" style="edgeStyle=none;html=1;" parent="1" source="3" target="28" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="340" y="240" as="targetPoint"/>
+                    </mxGeometry>
                 </mxCell>
-                <mxCell id="16" value="board" style="html=1;" vertex="1" parent="1">
-                    <mxGeometry x="390" y="380" width="110" height="50" as="geometry"/>
+                <mxCell id="3" value="manager" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="415" y="260" width="30" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="player B" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="495" y="410" width="30" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="점수계산&lt;br&gt;종료판단&lt;br&gt;플레이어 상태판단" style="edgeStyle=none;html=1;exitX=0.25;exitY=0.1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.75;entryY=0.1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="3" target="3" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="405" y="240"/>
+                            <mxPoint x="430" y="220"/>
+                            <mxPoint x="455" y="240"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="13" value="key 조작&lt;br&gt;커서조작" style="edgeStyle=none;html=1;exitX=0;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="2" target="2" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="315" y="420"/>
+                            <mxPoint x="295" y="440"/>
+                            <mxPoint x="305" y="460"/>
+                            <mxPoint x="325" y="460"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="15" value="잡은유닛" style="edgeStyle=none;html=1;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="14" target="3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="board" style="html=1;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="580" width="110" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="board" style="html=1;" parent="1" vertex="1">
+                    <mxGeometry x="445" y="580" width="110" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="ScoreManager" style="html=1;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="310" width="95" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" style="edgeStyle=none;html=1;" parent="1" source="22" target="24" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="KeyAction" style="html=1;" parent="1" vertex="1">
+                    <mxGeometry x="525" y="50" width="110" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" style="edgeStyle=none;html=1;" parent="1" source="24" target="18" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="CursorService" style="html=1;" parent="1" vertex="1">
+                    <mxGeometry x="192.5" y="50" width="110" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" style="edgeStyle=none;html=1;" parent="1" source="28" target="20" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" value="ScoreService" style="html=1;" parent="1" vertex="1">
+                    <mxGeometry x="192.5" y="210" width="110" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="Cursor" style="html=1;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="130" width="55" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="ScoreCountRule" style="html=1;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="310" width="110" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" style="edgeStyle=none;html=1;" parent="1" source="28" target="30" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

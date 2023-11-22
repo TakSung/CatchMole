@@ -1,13 +1,16 @@
-import __init__
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Callable
+
+def _min_max_filtering(value:int, max_value:int)-> int:
+    return max(min(value, max_value),0)
 
 class Cursor:
-    def __init__(self, size:int, init_y:int=0, init_x:int=0):
+    def __init__(self, size:int, init_y:int=0, init_x:int=0, filter:Callable[[int,int], int]=_min_max_filtering):
         self.size = size
         self.set(y=init_y, x=init_x)
+        self.filter = filter
     
     def filtering_point(self, value:int)->int:
-        return max(min(value, self.size-1),0)
+        return filter(value, self.size-1)
     
     def get(self)->Tuple[int, int]:
         return (self.y, self.x)
