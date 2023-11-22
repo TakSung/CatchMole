@@ -1,7 +1,6 @@
 import __init__
 from typing import List, Union
 from collections.abc import Collection
-import time
 
 
 from Common.ObjectType import ObjectType
@@ -41,6 +40,7 @@ class RaiseHole(IRaiseObj, IMoleSubject):
     
     def run_timer(self):
         import threading
+        import time
         
         def auto_lower():
             time.sleep(self.get_time())
