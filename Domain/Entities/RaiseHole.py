@@ -1,5 +1,5 @@
 import __init__
-from typing import List
+from typing import List, Union
 from collections.abc import Collection
 import time
 
@@ -13,12 +13,19 @@ from Common.ObjectType import ObjectType
 
 class RaiseHole(IRaiseObj, IMoleSubject):
     
-    def __init__(self, y: int, x: int, observers: Collection[IMoleObserver]=[], factory:IObjFactory = ObjFactory()):
+    def __init__(self, y: int, x: int, observers: Union[Collection[IMoleObserver], IMoleObserver]=[], factory:IObjFactory = ObjFactory()):
         self.y = y
         self.x = x
         self.raise_obj = NoneObject()
         self.observers:List[IMoleObserver] = []
         self.factory = factory
+        match observers:
+            case obsr if isinstance(obsr, IMoleObserver):
+                observers = [obsr]
+            case obsrs if isinstance(obsrs, Collection):
+                pass
+            case _:
+                raise ValueError()
         self.register_observers(observers)
     
     def set_none_object(self)->IRaiseObj:

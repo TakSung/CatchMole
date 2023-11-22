@@ -25,6 +25,15 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
 
     def __init__(self,observers:List[IBoardObserver]=[], factory: IObjFactory = ObjFactory()):
         self.observers: List[IBoardObserver] = []
+        match observers:
+            case obsr if isinstance(obsr, IMoleObserver):
+                observers = [obsr]
+            case obsrs if isinstance(obsrs, Collection):
+                pass
+            case _:
+                raise ValueError()
+
+        self.register_observers(observers)
         self.register_observers(observers)
         self.board = MoleBoard.empty_board([self], factory)
         self.notify_board()
@@ -56,7 +65,7 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
 
     def update_state(self, y: int, x: int, type: ObjectType) -> None:
         self.notify_board()
-        
+
     def register_mole_observers(self, observers: Collection[IMoleObserver])->None:
         if self.board is None:
             raise ValueError("MoleBoard NotExistBoard")

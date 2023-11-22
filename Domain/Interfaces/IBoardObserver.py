@@ -1,5 +1,5 @@
 from abc import *
-from typing import List
+from typing import List,Union
 from collections.abc import Collection
 from Common.ObjectType import ObjectType
 
