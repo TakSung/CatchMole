@@ -6,7 +6,7 @@ from typing import List
 from collections.abc import Collection
 from Domain.Interfaces.IBoard import IBoard
 from Domain.Interfaces.IRaiseObj import IRaiseObj
-from Domain.Interfaces.IMoleObserver import IMoleObserver
+from Domain.Interfaces.IMoleObserver import IMoleObserver, IMoleSubject
 from Domain.Interfaces.IBoardObserver import IBoardObserver, IBoardSubject
 from Common.ObjectType import ObjectType
 
@@ -14,7 +14,7 @@ from Domain.Entities.ObjFactory import *
 from Domain.Entities.RaiseHole import RaiseHole
 
 
-class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
+class MoleBoard(IBoard, IMoleObserver, IBoardSubject, IMoleSubject):
     size = (4, 4)
 
     def empty_board(mole_observers:Collection[IMoleObserver], factory:IObjFactory) -> List[List[RaiseHole]]:
@@ -23,20 +23,30 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
     def empty_board_state() -> List[List[ObjectType]]:
         return [[ObjectType.NONE] * MoleBoard.size[1] for _ in range(MoleBoard.size[0])]
 
-    def __init__(self,observers:List[IBoardObserver]=[], factory: IObjFactory = ObjFactory()):
-        self.observers: List[IBoardObserver] = []
-        match observers:
+    def __init__(self,board_observers:List[IBoardObserver]=[], mole_observers:List[IMoleObserver]=[], factory: IObjFactory = ObjFactory()):
+        self.board_observers: List[IBoardObserver] = []
+        match board_observers:
             case obsr if isinstance(obsr, IMoleObserver):
-                observers = [obsr]
+                board_observers = [obsr]
             case obsrs if isinstance(obsrs, Collection):
                 pass
             case _:
                 raise ValueError()
 
-        self.register_board_observers(observers)
-        self.register_board_observers(observers)
+        self.register_board_observers(board_observers)
         self.board = MoleBoard.empty_board([self], factory)
         self.notify_board()
+
+        self.mole_observers: List[IMoleObserver] = []
+        match mole_observers:
+            case obsr if isinstance(obsr, IMoleObserver):
+                mole_observers = [obsr]
+            case obsrs if isinstance(obsrs, Collection):
+                pass
+            case _:
+                raise ValueError()
+        self.register_mole_observers(mole_observers)
+
 
     def get_board_state(self) -> List[List[ObjectType]]:
         ret = []
@@ -65,25 +75,27 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
 
     def update_state(self, y: int, x: int, type: ObjectType) -> None:
         self.notify_board()
+    
+    def notify_mole_state(self) -> None:
+        pass
 
     def register_mole_observers(self, observers: Collection[IMoleObserver])->None:
-        if self.board is None:
-            raise ValueError("MoleBoard NotExistBoard")
-        
+        if observers is None:
+            raise ValueError("MoleBoard in register_observers")
         for line in self.board:
-            for raise_hole in line:
-                raise_hole.register_mole_observers(observers)
+            for obj in line:
+                obj.register_mole_observers(observers)
 
     def register_board_observers(self, observers: Collection[IBoardObserver]) -> None:
         if observers is None:
             raise ValueError("MoleBoard in register_observers")
         for obsr in observers:
-            self.observers.append(obsr)
+            self.board_observers.append(obsr)
 
     def notify_board(self) -> None:
-        if self.observers is None:
+        if self.board_observers is None:
             return
-        for obsv in self.observers:
+        for obsv in self.board_observers:
             obsv.update_board(self.get_board_state())
 
     def print(self, tab: int = 2):

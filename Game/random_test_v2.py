@@ -95,7 +95,7 @@ def convert_score(type: ObjectType) -> int:
             return 0
 
 
-board = MoleBoard(observers=[GUI_Printer()], factory=TestObjFactory(4))
+board = MoleBoard(board_observers=[GUI_Printer()], factory=TestObjFactory(4))
 # for y in range(3):
 #     for x in range(3):
 #         board.raise_obj(y, x, type=ObjectType.BASIC_MOLE)

@@ -31,7 +31,7 @@ class BoardPrinter(IBoardObserver):
         print(" ", "=" * (2 * cols + 1), sep="")
 
 printer = BoardPrinter()
-mole_board = MoleBoard(observers=[printer])
+mole_board = MoleBoard(board_observers=[printer])
 ## 램덤한 위치에 두더지 올리기
 
 while True:
