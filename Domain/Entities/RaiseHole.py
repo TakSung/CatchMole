@@ -3,29 +3,33 @@ from typing import List, Union
 from collections.abc import Collection
 
 
-from Common.ObjectType import ObjectType
+from Common import ObjectType,PlayerState
 from Domain.Interfaces.IRaiseObj import IRaiseObj
 from Domain.Entities.RaiseObject import NoneObject
 from Domain.Entities.ObjFactory import *
 from Domain.Interfaces.IMoleObserver import IMoleSubject, IMoleObserver
-from Common.ObjectType import ObjectType
 
 class RaiseHole(IRaiseObj, IMoleSubject):
     
-    def __init__(self, y: int, x: int, observers: Union[Collection[IMoleObserver], IMoleObserver]=[], factory:IObjFactory = ObjFactory()):
+    def __init__(
+        self, 
+        y: int,
+        x: int, mole_observers: Union[Collection[IMoleObserver], IMoleObserver]=[], 
+        factory:IObjFactory = ObjFactory()
+        ):
         self.y = y
         self.x = x
         self.raise_obj = NoneObject()
-        self.observers:List[IMoleObserver] = []
+        self.mole_observers:List[IMoleObserver] = []
         self.factory = factory
-        match observers:
+        match mole_observers:
             case obsr if isinstance(obsr, IMoleObserver):
-                observers = [obsr]
+                mole_observers = [obsr]
             case obsrs if isinstance(obsrs, Collection):
                 pass
             case _:
                 raise ValueError()
-        self.register_observers(observers)
+        self.register_mole_observers(mole_observers)
     
     def set_none_object(self)->IRaiseObj:
         if not isinstance(self.raise_obj, NoneObject):
@@ -61,18 +65,18 @@ class RaiseHole(IRaiseObj, IMoleSubject):
         self.raise_obj = obj
         self.run_timer()
         return self.raise_obj
-        
-    def notify_state(self) -> None:
-        if self.observers == None:
+
+    def notify_mole_state(self) -> None:
+        if self.mole_observers == None:
             return
-        for obsv in self.observers:
+        for obsv in self.mole_observers:
             obsv.update_state(self.y, self.x, self.get_state())
 
-    def register_observers(self, observers: Collection[IMoleObserver]) -> None:
+    def register_mole_observers(self, observers: Collection[IMoleObserver]) -> None:
         if observers is None:
             raise ValueError("RaiseHole in register_observers")
         for obsr in observers:
-            self.observers.append(obsr)
+            self.mole_observers.append(obsr)
 
     ## 일어나 있을 때 자신의 상태를 알려준다.
     def get_state(self) -> ObjectType:
@@ -84,7 +88,7 @@ class RaiseHole(IRaiseObj, IMoleSubject):
         self.raise_obj.try_lower()
         if self.raise_obj.get_state() == ObjectType.NONE and not isinstance(self.raise_obj, NoneObject):
             self.set_none_object()
-            self.notify_state()
+            self.notify_mole_state()
 
     
     ## 올라가 있을때 때리면 때린 객체의 종류를 받고, 내려가 있느면 아무것도 안해고 NONE 을 반환한다.
@@ -93,7 +97,7 @@ class RaiseHole(IRaiseObj, IMoleSubject):
 
         if self.raise_obj.get_state() == ObjectType.NONE and not isinstance(self.raise_obj, NoneObject):
             self.set_none_object()
-            self.notify_state()
+            self.notify_mole_state()
         
         return result
     

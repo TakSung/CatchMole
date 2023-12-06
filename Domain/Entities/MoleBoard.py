@@ -33,8 +33,8 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
             case _:
                 raise ValueError()
 
-        self.register_observers(observers)
-        self.register_observers(observers)
+        self.register_board_observers(observers)
+        self.register_board_observers(observers)
         self.board = MoleBoard.empty_board([self], factory)
         self.notify_board()
 
@@ -72,9 +72,9 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
         
         for line in self.board:
             for raise_hole in line:
-                raise_hole.register_observers(observers)
+                raise_hole.register_mole_observers(observers)
 
-    def register_observers(self, observers: Collection[IBoardObserver]) -> None:
+    def register_board_observers(self, observers: Collection[IBoardObserver]) -> None:
         if observers is None:
             raise ValueError("MoleBoard in register_observers")
         for obsr in observers:

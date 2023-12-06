@@ -11,9 +11,9 @@ class IMoleObserver(metaclass=ABCMeta):
 
 class IMoleSubject(metaclass=ABCMeta):
     @abstractmethod
-    def notify_state(self) -> None:
+    def notify_mole_state(self) -> None:
         pass
 
     @abstractmethod
-    def register_observers(self, observers: Collection[IMoleObserver]) -> None:
+    def register_mole_observers(self, observers: Collection[IMoleObserver]) -> None:
         pass

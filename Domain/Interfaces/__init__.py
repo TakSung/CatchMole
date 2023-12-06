@@ -8,6 +8,7 @@ if not (root_path in sys.path):
     sys.path.append(root_path)
 
 from Domain.Interfaces.IBoard import IBoard
+from Domain.Interfaces.IPlayerStateObserver import IPlayerStateObserver,IPlayerStateSubject
 from Domain.Interfaces.IBoardObserver import IBoardObserver, IBoardSubject
 from Domain.Interfaces.IMoleObserver import IMoleObserver, IMoleSubject
 from Domain.Interfaces.IRaiseObj import IRaiseObj

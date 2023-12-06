@@ -16,5 +16,5 @@ class IBoardSubject(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def register_observers(self, observers: Collection[IBoardObserver]) -> None:
+    def register_board_observers(self, observers: Collection[IBoardObserver]) -> None:
         pass

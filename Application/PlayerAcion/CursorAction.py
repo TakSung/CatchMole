@@ -1,33 +1,34 @@
 import __init__
 
+from Common import PlayerState
 from Domain.Entities.Cursor import Cursor
 from Domain.Interfaces import IPlayerAction
 
 class CursorRightAction(IPlayerAction):
-    def __init(self, cursor:Cursor):
+    def __init__(self, cursor:Cursor):
         self.cursor = cursor
 
     def action(self) -> None:
-        raise NotImplementedError()
+        self.cursor.set(x=self.cursor.get_x()+1)
     
 class CursorLeftAction(IPlayerAction):
-    def __init(self, cursor:Cursor):
+    def __init__(self, cursor:Cursor):
         self.cursor = cursor
 
     def action(self) -> None:
-        raise NotImplementedError()
+        self.cursor.set(x=self.cursor.get_x()-1)
     
-class CursorUPAction(IPlayerAction):
-    def __init(self, cursor:Cursor):
+class CursorUpAction(IPlayerAction):
+    def __init__(self, cursor:Cursor):
         self.cursor = cursor
 
     def action(self) -> None:
-        raise NotImplementedError()
+        self.cursor.set(y=self.cursor.get_y()+1)
     
 class CursorDownAction(IPlayerAction):
-    def __init(self, cursor:Cursor):
+    def __init__(self, cursor:Cursor):
         self.cursor = cursor
 
     def action(self) -> None:
-        raise NotImplementedError()
+        self.cursor.set(y=self.cursor.get_y()-1)
     
