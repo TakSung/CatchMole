@@ -74,17 +74,22 @@ cursor_x, cursor_y = 0, 0
 
 def print_room(y:int, x:int, type:ObjectType, is_cursor:bool):
     rect_width, rect_height = 270,270
-    pg.draw.rect(screen, cursor_color, [x, y, 270, 270], 100)
-    pg.draw.rect(screen, BLACK, (x - outline_thickness, y - outline_thickness,
-                                     rect_width + outline_thickness * 2, rect_height + outline_thickness * 2))
+    X = WIDTH / 3 * x
+    Y = HEIGHT / 3 * y
+    pg.draw.rect(screen, BLACK, (X - outline_thickness, Y - outline_thickness,
+                                     X + rect_width + outline_thickness * 2, Y + rect_height + outline_thickness * 2))
+    pg.draw.rect(screen, WHITE, [X, Y, X+270, Y+270], 100)
+    
     if is_cursor == True:
-        pg.draw.circle(screen, cursor_color, (x, y), 100)
+        cursor_pos_x = x * CELL_SIZE + CELL_SIZE // 2
+        cursor_pos_y = y * CELL_SIZE + CELL_SIZE // 2
+        pg.draw.circle(screen, cursor_color, (cursor_pos_x, cursor_pos_y), 100)
     match type:
         case ObjectType.BASIC_MOLE:
             mole = mole_image.get_rect(
                 left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
             )
-            moles.append(mole)
+            screen.blit(mole_image,mole)
     
         
         
@@ -143,7 +148,7 @@ import threading
 import time     
 def auto_raise():
     for _ in range(30): 
-        time.sleep(1)
+        time.sleep(4)
         xr = random.randrange(0, 3)
         yr = random.randrange(0, 3)
         ic("raise mole",xr, yr)
@@ -172,9 +177,9 @@ while True:
     # game_initiating_window()
     
     # 현재 커서 위치에 빨간색 원 그리기
-    cursor_pos_x = cursor_x * CELL_SIZE + CELL_SIZE // 2
-    cursor_pos_y = cursor_y * CELL_SIZE + CELL_SIZE // 2
-    pg.draw.circle(screen, cursor_color, (cursor_pos_x, cursor_pos_y), 100)
+    # cursor_pos_x = cursor_x * CELL_SIZE + CELL_SIZE // 2
+    # cursor_pos_y = cursor_y * CELL_SIZE + CELL_SIZE // 2
+    # pg.draw.circle(screen, cursor_color, (cursor_pos_x, cursor_pos_y), 100)
     
         
     score += convert_score(t)
@@ -182,14 +187,7 @@ while True:
     #     screen.blit(mole_image, mole)
     for item in room_manager.get_changed_list():
         (y,x,type,cursor) = item
-        match type:
-            case ObjectType.BASIC_MOLE:
-                mole = mole_image.get_rect(
-                    left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
-                )
-                screen.blit(mole_image,mole)
-            case _:
-                pass
+        print_room(y,x,type,cursor)
     text_surface = my_font.render(f"Score : {score}", False, (0, 0, 0))
     screen.blit(text_surface, (0, 0))
     pg.display.update()
