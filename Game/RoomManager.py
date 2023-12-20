@@ -69,7 +69,7 @@ class RoomManager():
         self.rooms[y][x].set_curser(True)
     
     def set_obj(self, y:int, x:int, type:ObjectType):
-        self.rooms[y][x].set_obj(ObjectType)
+        self.rooms[y][x].set_obj(type)
     
     def get_changed_list(self)-> List[Tuple[int, int, ObjectType, bool]]:
         """_summary_

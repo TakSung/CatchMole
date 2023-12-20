@@ -2,7 +2,7 @@ from abc import ABCMeta
 import __init__
 from icecream import ic
 
-from typing import List
+from typing import List, Union
 from collections.abc import Collection
 from Domain.Interfaces.IBoard import IBoard
 from Domain.Interfaces.IRaiseObj import IRaiseObj
@@ -23,17 +23,16 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject):
     def empty_board_state() -> List[List[ObjectType]]:
         return [[ObjectType.NONE] * MoleBoard.size[1] for _ in range(MoleBoard.size[0])]
 
-    def __init__(self,observers:List[IBoardObserver]=[], factory: IObjFactory = ObjFactory()):
+    def __init__(self,observers:Union[List[IBoardObserver],IBoardObserver]=[], factory: IObjFactory = ObjFactory()):
         self.observers: List[IBoardObserver] = []
         match observers:
-            case obsr if isinstance(obsr, IMoleObserver):
+            case obsr if isinstance(obsr, IBoardObserver):
                 observers = [obsr]
             case obsrs if isinstance(obsrs, Collection):
                 pass
             case _:
                 raise ValueError()
 
-        self.register_board_observers(observers)
         self.register_board_observers(observers)
         self.board = MoleBoard.empty_board([self], factory)
         self.notify_board()

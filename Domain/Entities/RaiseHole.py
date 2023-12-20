@@ -58,7 +58,8 @@ class RaiseHole(IRaiseObj, IMoleSubject):
         '''
         if self.raise_obj.get_state() == ObjectType.NONE:
             self.raise_obj = self.factory.get_obj(object_type)
-        self.run_timer()
+            self.notify_mole_state()
+            self.run_timer()
         return self.raise_obj
     
     def set_raise_object_to_raise_obj(self, obj:IRaiseObj)->IRaiseObj:
@@ -73,10 +74,12 @@ class RaiseHole(IRaiseObj, IMoleSubject):
             obsv.update_state(self.y, self.x, self.get_state())
 
     def register_mole_observers(self, observers: Collection[IMoleObserver]) -> None:
-        if observers is None:
-            raise ValueError("RaiseHole in register_observers")
-        for obsr in observers:
-            self.mole_observers.append(obsr)
+        match observers:
+            case observers if isinstance(observers, Collection):
+                for obsr in observers:
+                    self.mole_observers.append(obsr)
+            case _:
+                raise ValueError("RaiseHole in register_observers")
 
     ## 일어나 있을 때 자신의 상태를 알려준다.
     def get_state(self) -> ObjectType:
