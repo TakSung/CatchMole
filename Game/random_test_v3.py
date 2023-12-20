@@ -13,14 +13,17 @@ from Common.ObjectType import ObjectType
 from Domain.Entities.ObjFactory import *
 from Domain.Entities.MoleBoard import MoleBoard
 from Application.GameManage import PlayerActionSet
+from Game.RoomManager import RoomManager
 
 clock = pg.time.Clock()
 
 WIDTH = 810
 HEIGHT = 810
 CELL_SIZE = WIDTH // 3
+outline_thickness = 3
 
 WHITE = (255, 255, 255)
+BLACK = (0,0,0)
 cursor_color = (0, 0, 255)
 
 line_color = (0, 0, 0)
@@ -35,6 +38,8 @@ effect_image = pg.transform.scale(effect_image, (240, 200))
 fps = 30
 
 screen = pg.display.set_mode((WIDTH, HEIGHT))
+room_manager = RoomManager(3)
+
 
 pg.display.set_caption("Test")
 
@@ -60,12 +65,33 @@ def move_cursor(key):
         
         
     (cursor_y, cursor_x) = player.get_cursor()
+    room_manager.set_curser(cursor_pos_y, cursor_pos_x)
     
 
 # 게임 변수 설정
 player = PlayerActionSet(3)
 cursor_x, cursor_y = 0, 0
 
+def print_room(y:int, x:int, type:ObjectType, is_cursor:bool):
+    rect_width, rect_height = 270,270
+    pg.draw.rect(screen, cursor_color, [x, y, 270, 270], 100)
+    pg.draw.rect(screen, BLACK, (x - outline_thickness, y - outline_thickness,
+                                     rect_width + outline_thickness * 2, rect_height + outline_thickness * 2))
+    if is_cursor == True:
+        pg.draw.circle(screen, cursor_color, (x, y), 100)
+    match type:
+        case ObjectType.BASIC_MOLE:
+            mole = mole_image.get_rect(
+                left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
+            )
+            moles.append(mole)
+    
+        
+        
+
+
+    
+    
 
 def game_initiating_window():
     # displaying over the screen
@@ -166,9 +192,12 @@ while True:
     cursor_pos_x = cursor_x * CELL_SIZE + CELL_SIZE // 2
     cursor_pos_y = cursor_y * CELL_SIZE + CELL_SIZE // 2
     pg.draw.circle(screen, cursor_color, (cursor_pos_x, cursor_pos_y), 100)
+    
         
     score += convert_score(t)
     for mole in moles:
+        #변경사항
+        #변경된 room만 그리기
         screen.blit(mole_image, mole)
     text_surface = my_font.render(f"Score : {score}", False, (0, 0, 0))
     screen.blit(text_surface, (0, 0))
