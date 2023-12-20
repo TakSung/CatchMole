@@ -7,17 +7,18 @@ from pygame.locals import *
 import random
 from icecream import ic
 
-from Domain.Interfaces.IBoardObserver import IBoardObserver
+from Domain.Interfaces.IMoleObserver import IMoleObserver
 from Common.ObjectType import ObjectType
 
 from Domain.Entities.ObjFactory import *
 from Domain.Entities.MoleBoard import MoleBoard
 from Application.GameManage import PlayerActionSet
+from Game.RoomManager import RoomManager
 
 clock = pg.time.Clock()
 
 WIDTH = 810
-HEIGHT = 810
+HEIGHT = 811
 CELL_SIZE = WIDTH // 3
 
 WHITE = (255, 255, 255)
@@ -35,7 +36,7 @@ effect_image = pg.transform.scale(effect_image, (240, 200))
 fps = 30
 
 screen = pg.display.set_mode((WIDTH, HEIGHT))
-
+room_manager = RoomManager(3)
 pg.display.set_caption("Test")
 
 def move_cursor(key):
@@ -60,6 +61,7 @@ def move_cursor(key):
         
         
     (cursor_y, cursor_x) = player.get_cursor()
+    room_manager.set_curser(cursor_y, cursor_x)
     
 
 # 게임 변수 설정
@@ -86,30 +88,12 @@ def game_initiating_window():
     pg.display.update()
     clock.tick(30)
 
-moles = []
-class GUI_Printer(IBoardObserver):
-    def update_board(self, type: List[List[ObjectType]]) -> None:
-        global moles
-        row = len(type)
-        col = len(type[0])
-
-        moles = []
-
-        for y in range(row):
-            for x in range(col):
-                match type[y][x]:
-                    case ObjectType.BASIC_MOLE:
-                        mole = mole_image.get_rect(
-                            left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
-                        )
-                        moles.append(mole)
-                    case _:
-                        pass
-
+class RoomUpdater(IMoleObserver):
+    def __init__(self, room_manager:RoomManager):
+        self.room_manager = room_manager
         
-        
-        
-
+    def update_state(self, y: int, x: int, type:ObjectType) -> None:
+        self.room_manager.set_obj(y,x,type)
 
 pg.font.init()  # you have to call this at the start,
 # if you want to use this module.
@@ -125,7 +109,8 @@ def convert_score(type: ObjectType) -> int:
             return 0
 
 
-board = MoleBoard(observers=[GUI_Printer()], factory=TestObjFactory(4))
+board = MoleBoard(factory=TestObjFactory(4))
+board.register_mole_observers([RoomUpdater(room_manager)])
 # for y in range(3):
 #     for x in range(3):
 #         board.raise_obj(y, x, type=ObjectType.BASIC_MOLE)
@@ -137,16 +122,16 @@ def auto_raise():
         time.sleep(1)
         xr = random.randrange(0, 3)
         yr = random.randrange(0, 3)
-        ic(xr, yr)
+        ic("raise mole",xr, yr)
         board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
 
 
 threading.Thread(target=auto_raise).start()
 
-
+game_initiating_window()
 
 while True:
-    if score >= 10:
+    if score >= 100:
         threading.Thread(target=auto_raise).start()
         score -= 9
     t = ObjectType.NONE
@@ -160,7 +145,7 @@ while True:
         # screen.fill(WHITE)
         
     # draw_board()
-    game_initiating_window()
+    # game_initiating_window()
     
     # 현재 커서 위치에 빨간색 원 그리기
     cursor_pos_x = cursor_x * CELL_SIZE + CELL_SIZE // 2
@@ -168,12 +153,23 @@ while True:
     pg.draw.circle(screen, cursor_color, (cursor_pos_x, cursor_pos_y), 100)
         
     score += convert_score(t)
-    for mole in moles:
-        screen.blit(mole_image, mole)
+    # for mole in moles:
+    #     screen.blit(mole_image, mole)
+    for item in room_manager.get_changed_list():
+        (y,x,type,cursor) = item
+        match type:
+            case ObjectType.BASIC_MOLE:
+                mole = mole_image.get_rect(
+                    left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
+                )
+                screen.blit(mole_image,mole)
+            case _:
+                pass
     text_surface = my_font.render(f"Score : {score}", False, (0, 0, 0))
     screen.blit(text_surface, (0, 0))
     pg.display.update()
-    clock.tick(10)
+    room_manager.check_room()
+    clock.tick(30)
     
 
 pg.quit()
