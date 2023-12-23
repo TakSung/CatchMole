@@ -93,7 +93,7 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject, IMoleSubject):
             self.board_observers.append(obsr)
 
     def notify_board(self) -> None:
-        if self.board_observers is None:
+        if self.observers is None:
             return
         for obsv in self.board_observers:
             obsv.update_board(self.get_board_state())
