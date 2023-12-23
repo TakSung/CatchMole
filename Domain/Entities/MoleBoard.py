@@ -37,15 +37,14 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject, IMoleSubject):
         self.board = MoleBoard.empty_board([self], factory)
         self.notify_board()
 
-        self.mole_observers: List[IMoleObserver] = []
-        match mole_observers:
+        match observers:
             case obsr if isinstance(obsr, IMoleObserver):
-                mole_observers = [obsr]
+                observers = [obsr]
             case obsrs if isinstance(obsrs, Collection):
                 pass
             case _:
                 raise ValueError()
-        self.register_mole_observers(mole_observers)
+        self.register_mole_observers(observers)
 
 
     def get_board_state(self) -> List[List[ObjectType]]:
@@ -95,7 +94,7 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject, IMoleSubject):
     def notify_board(self) -> None:
         if self.observers is None:
             return
-        for obsv in self.board_observers:
+        for obsv in self.observers:
             obsv.update_board(self.get_board_state())
 
     def print(self, tab: int = 2):
