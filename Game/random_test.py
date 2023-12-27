@@ -30,6 +30,7 @@ class BoardPrinter(IBoardObserver):
             print()
         print(" ", "=" * (2 * cols + 1), sep="")
 
+
 printer = BoardPrinter()
 mole_board = MoleBoard(board_observers=[printer])
 ## 램덤한 위치에 두더지 올리기
@@ -50,4 +51,4 @@ while True:
         continue
 
     t = mole_board.try_attack(yp, xp)
-    print("catch :",t.name)
+    print("catch :", t.name)

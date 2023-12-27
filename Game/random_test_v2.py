@@ -24,7 +24,7 @@ white = (255, 255, 255)
 line_color = (0, 0, 0)
 
 mole_image = pg.image.load("mole.png")
-effect_image = pg.image.load('boom.png')
+effect_image = pg.image.load("boom.png")
 mole_image = pg.transform.scale(mole_image, (240, 200))
 effect_image = pg.transform.scale(effect_image, (240, 200))
 
@@ -56,7 +56,10 @@ def game_initiating_window():
     pg.display.update()
     clock.tick(30)
 
+
 moles = []
+
+
 class GUI_Printer(IBoardObserver):
     def update_board(self, type: List[List[ObjectType]]) -> None:
         global moles
@@ -77,8 +80,6 @@ class GUI_Printer(IBoardObserver):
                         pass
 
         game_initiating_window()
-        
-        
 
 
 pg.font.init()  # you have to call this at the start,
@@ -99,11 +100,13 @@ board = MoleBoard(board_observers=[GUI_Printer()], factory=TestObjFactory(4))
 # for y in range(3):
 #     for x in range(3):
 #         board.raise_obj(y, x, type=ObjectType.BASIC_MOLE)
-        
+
 import threading
-import time     
+import time
+
+
 def auto_raise():
-    while True: 
+    while True:
         time.sleep(1)
         xr = random.randrange(0, 3)
         yr = random.randrange(0, 3)
@@ -114,14 +117,13 @@ def auto_raise():
 threading.Thread(target=auto_raise).start()
 
 
-
 while True:
     if score >= 10:
         threading.Thread(target=auto_raise).start()
         score -= 9
     t = ObjectType.NONE
     event = pg.event.poll()  # 이벤트 처리
-    
+
     if event.type == QUIT:
         pg.quit()
         sys.exit()
@@ -129,84 +131,84 @@ while True:
         if event.key == K_KP7:
             t = board.try_attack(0, 0)
             if t == ObjectType.BASIC_MOLE:
-                y=0
-                x=0
+                y = 0
+                x = 0
                 effect = effect_image.get_rect(
-                                left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
-                            )
+                    left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
+                )
                 screen.blit(effect_image, effect)
         elif event.key == K_KP8:
             t = board.try_attack(0, 1)
             if t == ObjectType.BASIC_MOLE:
-                y=0
-                x=1
+                y = 0
+                x = 1
                 effect = effect_image.get_rect(
-                                left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
-                            )
+                    left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
+                )
                 screen.blit(effect_image, effect)
         elif event.key == K_KP9:
             t = board.try_attack(0, 2)
             if t == ObjectType.BASIC_MOLE:
-                y=0
-                x=2
+                y = 0
+                x = 2
                 effect = effect_image.get_rect(
-                                left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
-                            )
+                    left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
+                )
                 screen.blit(effect_image, effect)
         elif event.key == K_KP4:
             t = board.try_attack(1, 0)
             if t == ObjectType.BASIC_MOLE:
-                y=1
-                x=0
+                y = 1
+                x = 0
                 effect = effect_image.get_rect(
-                                left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
-                            )
+                    left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
+                )
                 screen.blit(effect_image, effect)
         elif event.key == K_KP5:
             t = board.try_attack(1, 1)
             if t == ObjectType.BASIC_MOLE:
-                y=1
-                x=1
+                y = 1
+                x = 1
                 effect = effect_image.get_rect(
-                                left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
-                            )
+                    left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
+                )
                 screen.blit(effect_image, effect)
         elif event.key == K_KP6:
             t = board.try_attack(1, 2)
             if t == ObjectType.BASIC_MOLE:
-                y=1
-                x=2
+                y = 1
+                x = 2
                 effect = effect_image.get_rect(
-                                left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
-                            )
+                    left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
+                )
                 screen.blit(effect_image, effect)
         elif event.key == K_KP1:
             t = board.try_attack(2, 0)
             if t == ObjectType.BASIC_MOLE:
-                y=2
-                x=0
+                y = 2
+                x = 0
                 effect = effect_image.get_rect(
-                                left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
-                            )
+                    left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
+                )
                 screen.blit(effect_image, effect)
         elif event.key == K_KP2:
             t = board.try_attack(2, 1)
             if t == ObjectType.BASIC_MOLE:
-                y=2
-                x=1
+                y = 2
+                x = 1
                 effect = effect_image.get_rect(
-                                left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
-                            )
+                    left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
+                )
                 screen.blit(effect_image, effect)
-            
+
         elif event.key == K_KP3:
             t = board.try_attack(2, 2)
             if t == ObjectType.BASIC_MOLE:
-                y=2
-                x=2
+                y = 2
+                x = 2
                 effect = effect_image.get_rect(
-                                left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
-                            )
+                    left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20
+                )
                 screen.blit(effect_image, effect)
     score += convert_score(t)
     for mole in moles:
@@ -215,6 +217,6 @@ while True:
     screen.blit(text_surface, (0, 0))
     pg.display.update()
     clock.tick(30)
-    
+
 
 pg.quit()
