@@ -1,21 +1,28 @@
 import __init__
 
 from collections.abc import Collection
-from typing import Tuple,Union, List, Callable
+from typing import Tuple,Union, List,Callable
 
 from Common import PlayerState, ObjectType
 from Domain.Interfaces import IPlayerStateObserver, IPlayerStateSubject, IMoleObserver,IMoleSubject
 from Domain.Entities.Cursor import Cursor
 from Application.KeyAction import PlayerDownArrowAction,PlayerLeftArrowAction,PlayerRightArrowAction, PlayerUpArrowAction
-from Application.GameManage import PlayerActionSet
+from Application.GameManage import PlayerActionSet, IConvertObjectToState
 
 
 class BoardPlayerLinker(IPlayerStateSubject, IMoleObserver):
+    """_summary_
+    플레이어 상태와 두더지 잡은 상태를 연결시켜준다
+
+    Args:
+        IPlayerStateSubject (_type_): _description_
+        IMoleObserver (_type_): _description_
+    """
     def __init__(
         self, 
         players:Collection[IPlayerStateObserver], 
         mole:IMoleSubject, 
-        state_func:Callable[[int,int,ObjectType], Tuple[PlayerState,float]]
+        converter : IConvertObjectToState
         ):
         """_summary_
         두더지 구멍과 플레이어를 이어준다. 잡힌 두더지가 플레이어에게 어떤 영향을 주는지 기술한 state_func 함수를 인자로 넣어준다.
@@ -28,7 +35,7 @@ class BoardPlayerLinker(IPlayerStateSubject, IMoleObserver):
         self.players:List[IPlayerStateObserver] = []
         self.register_player_state_observers(players)
         mole.register_mole_observers([self])
-        self.state_func:Callable[[int,int,ObjectType],Tuple[PlayerState,float]] = state_func
+        self.converter = converter
         
     def notify_player_state(self) -> None:
         """_summary_
@@ -48,11 +55,11 @@ class BoardPlayerLinker(IPlayerStateSubject, IMoleObserver):
         인자로 받은 함수를 사용하여 스트레티지 하게 상태를 전파한다.
         일정시간이 지난 이후 노멀상태로 돌아가게 한다.
         Args:
-            y (int): _description_
+            y (int): _description_:
             x (int): _description_
             type (ObjectType): _description_
         """
-        (state, time)=self.state_func(y,x,type)
+        (state, time)=self.converter.convert(y,x,type)
         for p in self.players:
             p.update_state(state)
         
@@ -81,7 +88,8 @@ class PlayerManager:
     def __init__(
         self,
         to_other_matchs:Union[Collection[Tuple[Collection[IPlayerStateObserver], IMoleSubject,Callable[[int,int,ObjectType],Tuple[PlayerState,float]]]], None]=None,
-        to_my_matchs:Union[Collection[Tuple[Collection[IPlayerStateObserver], IMoleSubject, Callable[[int,int,ObjectType],Tuple[PlayerState,float]]]], None]=None
+        to_my_matchs:Union[Collection[Tuple[Collection[IPlayerStateObserver], IMoleSubject, Callable[[int,int,ObjectType],Tuple[PlayerState,float]]]], None]=None,
+        
         ):
         
         self.other_list:List[BoardPlayerLinker] = []
