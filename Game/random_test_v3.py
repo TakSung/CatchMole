@@ -34,8 +34,6 @@ effect_image = pg.image.load("boom.png")
 mole_image = pg.transform.scale(mole_image, (120, 100))
 effect_image = pg.transform.scale(effect_image, (120, 00))
 
-# pg.init()
-
 fps = 30
 
 game_screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -125,9 +123,6 @@ def convert_score(type: ObjectType) -> int:
 
 
 board = MoleBoard(mole_observers=[RoomUpdater(room_manager)], factory=TestObjFactory(4))
-# for y in range(3):
-#     for x in range(3):
-#         board.raise_obj(y, x, type=ObjectType.BASIC_MOLE)
 
 import threading
 import time
@@ -140,9 +135,6 @@ def auto_raise():
         yr = random.randrange(0, 3)
         ic("raise mole", xr, yr)
         board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
-
-
-#game_initiating_window()
 
 while True:
     threading.Thread(target=auto_raise).start()
@@ -157,19 +149,7 @@ while True:
             sys.exit()
         elif event.type == pg.KEYDOWN:  # 키 입력을 처리
             move_cursor(event.key)
-        # screen.fill(WHITE)
 
-        # draw_board()
-        # game_initiating_window()
-
-        # 현재 커서 위치에 빨간색 원 그리기
-        # cursor_pos_x = cursor_x * CELL_SIZE + CELL_SIZE // 2
-        # cursor_pos_y = cursor_y * CELL_SIZE + CELL_SIZE // 2
-        # pg.draw.circle(screen, cursor_color, (cursor_pos_x, cursor_pos_y), 100)
-
-     
-        # for mole in moles:
-        #     screen.blit(mole_image, mole)
         for item in room_manager.get_changed_list():
             (y, x, type, cursor) = item
             print_room(y, x, type, cursor)
