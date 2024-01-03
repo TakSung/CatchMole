@@ -5,6 +5,8 @@ class ObjectType(IntEnum):
     NONE = 0
     BASIC_MOLE = 1
     HACKER = 2
+    BOMB = 3
+    GOLD_MOLE = 4
 
 def get_object_type(i:int) -> ObjectType:
     for member in ObjectType:

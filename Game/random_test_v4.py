@@ -17,10 +17,11 @@ from Game.RoomManager import RoomManager
 
 clock = pg.time.Clock()
 
-WIDTH = 600
-HEIGHT = 600
-STATUS = 800
-CELL_SIZE = WIDTH // 3
+ALL_W =1000
+STATUS = 1000
+HEIGHT = 800
+BOARD_WIDTH = 800
+CELL_SIZE = BOARD_WIDTH // 4
 outline_thickness = 5
 
 WHITE = (255, 255, 255)
@@ -30,15 +31,19 @@ cursor_color = (0, 0, 255)
 line_color = (0, 0, 0)
 
 mole_image = pg.image.load("mole.png")
+gold_mole_image = pg.image.load("gold_mole.png")
+bomb_image = pg.image.load("bomb.webp")
 effect_image = pg.image.load("boom.png")
 mole_image = pg.transform.scale(mole_image, (120, 100))
-effect_image = pg.transform.scale(effect_image, (120, 00))
+gold_mole_image = pg.transform.scale(gold_mole_image, (120, 100))
+effect_image = pg.transform.scale(effect_image, (120, 100))
+bomb_image = pg.transform.scale(bomb_image, (120, 100))
 
 fps = 30
 
-game_screen = pg.display.set_mode((WIDTH, HEIGHT))
-satus_screen = pg.display.set_mode((WIDTH, STATUS))
-room_manager = RoomManager(3)
+game_screen = pg.display.set_mode((ALL_W , HEIGHT))
+satus_screen = pg.display.set_mode((ALL_W , STATUS))
+room_manager = RoomManager(4)
 
 
 pg.display.set_caption("Test")
@@ -61,7 +66,7 @@ def move_cursor(key):
         (attack_y, attack_x) = player.get_cursor()
         t=board.try_attack(attack_y, attack_x)
         effect = effect_image.get_rect(
-            left=WIDTH / 3 * attack_x + 20, top=HEIGHT / 3 * attack_y + 20
+            left=BOARD_WIDTH / 4 * attack_x + 20, top=HEIGHT / 4 * attack_y + 20
         )
         game_screen.blit(effect_image, effect)
         score += convert_score(t)
@@ -71,14 +76,14 @@ def move_cursor(key):
 
 
 # 게임 변수 설정
-player = PlayerActionSet(3)
+player = PlayerActionSet(4)
 cursor_x, cursor_y = 0, 0
 
 
 def print_room(y: int, x: int, type: ObjectType, is_cursor: bool):
     rect_width, rect_height = 195, 195
-    X = WIDTH / 3 * x
-    Y = HEIGHT / 3 * y
+    X = BOARD_WIDTH / 4 * x
+    Y = HEIGHT / 4 * y
     pg.draw.rect(
         game_screen,
         BLACK,
@@ -97,8 +102,15 @@ def print_room(y: int, x: int, type: ObjectType, is_cursor: bool):
         pg.draw.circle(game_screen, cursor_color, (cursor_pos_x, cursor_pos_y), 50)
     match type:
         case ObjectType.BASIC_MOLE:
-            mole = mole_image.get_rect(left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20)
+            mole = mole_image.get_rect(left=BOARD_WIDTH / 4 * x + 38 , top=HEIGHT / 4 * y + 40)
             game_screen.blit(mole_image, mole)
+        case ObjectType.BOMB:
+            bomb = bomb_image.get_rect(left=BOARD_WIDTH / 4 * x + 38 , top=HEIGHT / 4 * y + 40)
+            game_screen.blit(bomb_image, bomb)
+        case ObjectType.GOLD_MOLE:
+            gold_mole = gold_mole_image.get_rect(left=BOARD_WIDTH / 4 * x + 38 , top=HEIGHT / 4 * y + 40)
+            game_screen.blit(gold_mole_image, gold_mole)
+            
 
 class RoomUpdater(IMoleObserver):
     def __init__(self, room_manager: RoomManager):
@@ -118,6 +130,10 @@ def convert_score(type: ObjectType) -> int:
     match type:
         case ObjectType.BASIC_MOLE:
             return 1
+        case ObjectType.BOMB:
+            return -3
+        case ObjectType.GOLD_MOLE:
+            return 5
         case _:
             return 0
 
@@ -131,16 +147,25 @@ import time
 def auto_raise():
     for _ in range(90):
         time.sleep(1)
-        xr = random.randrange(0, 3)
-        yr = random.randrange(0, 3)
+        xr = random.randrange(0, 4)
+        yr = random.randrange(0, 4)
+        t = random.randrange(0, 1000)
         ic("raise mole", xr, yr)
-        board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
+        if t <334:
+            ic(t, ObjectType.BOMB)
+            board.raise_obj(yr, xr, type=ObjectType.BOMB)
+        elif 333< t < 901:
+            ic(t, ObjectType.BASIC_MOLE)
+            board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
+        else:
+            ic(t, ObjectType.GOLD_MOLE)
+            board.raise_obj(yr, xr, type=ObjectType.GOLD_MOLE)
 
 game_screen.fill(WHITE)
 
 while True:
     threading.Thread(target=auto_raise).start()
-    
+
     for _ in range(500):
         t = ObjectType.NONE
         event = pg.event.poll()  # 이벤트 처리
@@ -155,8 +180,8 @@ while True:
             (y, x, type, cursor) = item
             print_room(y, x, type, cursor)
         text_surface = my_font.render(f"Score : {score}", False, (0, 0, 0))
-        pg.draw.rect(game_screen, WHITE, [0, 600, 600, 200], 1000)
-        game_screen.blit(text_surface, (0, 610))
+        pg.draw.rect(game_screen, WHITE, [800, 0, 200, 800], 1000)
+        game_screen.blit(text_surface, (810, 0))
         pg.display.update()
         room_manager.check_room()
         clock.tick(30)
