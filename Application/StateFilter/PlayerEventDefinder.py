@@ -3,7 +3,7 @@ import __init__
 from collections.abc import Collection
 from typing import Tuple, Union, List
 
-from Common import PlayerState, ObjectType
+from Common import PlayerState, ObjectType, ObjectState
 from Domain.Interfaces import (
     IPlayerStateObserver,
     IPlayerStateSubject,
@@ -56,7 +56,9 @@ class BoardPlayerLinker(IPlayerStateSubject, IMoleObserver):
         for obsr in observers:
             self.players.append(obsr)
 
-    def update_state(self, y: int, x: int, type: ObjectType) -> None:
+    def update_state(
+        self, y: int, x: int, type: ObjectType, state: ObjectState
+    ) -> None:
         """_summary_
         mole이 전파한 정보를 업데이트 한다.
         인자로 받은 함수를 사용하여 스트레티지 하게 상태를 전파한다.
@@ -104,7 +106,7 @@ class PlayerEventDefinder:
                 ]
             ],
             None,
-        ] = None
+        ] = None,
     ):
         self.other_list: List[BoardPlayerLinker] = []
         self.my_list: List[BoardPlayerLinker] = []

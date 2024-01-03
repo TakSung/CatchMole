@@ -5,7 +5,7 @@ from Common.ObjectType import ObjectType
 
 class NoneObject(IRaiseObj):
     def __init__(self):
-        self.type = ObjectType.NONE
+        self.type = ObjectType.none
 
     def try_lower(self) -> None:
         pass

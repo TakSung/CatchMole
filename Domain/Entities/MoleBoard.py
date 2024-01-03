@@ -8,7 +8,7 @@ from Domain.Interfaces.IBoard import IBoard
 from Domain.Interfaces.IRaiseObj import IRaiseObj
 from Domain.Interfaces.IMoleObserver import IMoleObserver, IMoleSubject
 from Domain.Interfaces.IBoardObserver import IBoardObserver, IBoardSubject
-from Common.ObjectType import ObjectType
+from Common import ObjectType, ObjectState
 
 from Domain.Entities.ObjFactory import *
 from Domain.Entities.RaiseHole import RaiseHole
@@ -26,7 +26,7 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject, IMoleSubject):
         ]
 
     def empty_board_state() -> List[List[ObjectType]]:
-        return [[ObjectType.NONE] * MoleBoard.size[1] for _ in range(MoleBoard.size[0])]
+        return [[ObjectType.none] * MoleBoard.size[1] for _ in range(MoleBoard.size[0])]
 
     def __init__(
         self,
@@ -81,10 +81,12 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject, IMoleSubject):
     def try_attack(self, y: int, x: int) -> ObjectType:
         return self.board[y][x].try_attack()
 
-    def update_state(self, y: int, x: int, type: ObjectType) -> None:
+    def update_state(
+        self, y: int, x: int, type: ObjectType, state: ObjectState
+    ) -> None:
         self.notify_board()
 
-    def notify_mole_state(self) -> None:
+    def notify_mole_state(self, state: ObjectState) -> None:
         pass
 
     def register_mole_observers(self, observers: Collection[IMoleObserver]) -> None:
@@ -117,7 +119,7 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject, IMoleSubject):
             print(end="|")
             for j in range(self.size[1]):
                 match (self.get_state(i, j)):
-                    case ObjectType.NONE:
+                    case ObjectType.none:
                         print("X", end="|")
                     case _:
                         print("O", end="|")

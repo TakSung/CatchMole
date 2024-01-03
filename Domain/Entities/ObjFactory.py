@@ -8,7 +8,7 @@ from Domain.Entities.RaiseObject import *
 
 class IObjFactory(metaclass=ABCMeta):
     @abstractmethod
-    def get_obj(self,type: ObjectType) -> IRaiseObj:
+    def get_obj(self, type: ObjectType) -> IRaiseObj:
         pass
 
 
@@ -16,7 +16,7 @@ class ObjFactory(IObjFactory):
     def get_obj(self, type: ObjectType) -> IRaiseObj:
         obj = None
         match type:
-            case ObjectType.NONE:
+            case ObjectType.none:
                 obj = NoneObject()
             case ObjectType.BASIC_MOLE:
                 obj = Mole()
@@ -25,11 +25,12 @@ class ObjFactory(IObjFactory):
 
 class TestObjFactory(IObjFactory):
     def __init__(self, time=0.1):
-        self.time=time
-    def get_obj(self,type: ObjectType) -> IRaiseObj:
+        self.time = time
+
+    def get_obj(self, type: ObjectType) -> IRaiseObj:
         obj = None
         match type:
-            case ObjectType.NONE:
+            case ObjectType.none:
                 obj = NoneObject()
             case ObjectType.BASIC_MOLE:
                 obj = Mole(self.time)

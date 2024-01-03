@@ -1,17 +1,19 @@
 from abc import *
 from collections.abc import Collection
-from Common.ObjectType import ObjectType
+from Common import ObjectType, ObjectState
 
 
 class IMoleObserver(metaclass=ABCMeta):
     @abstractmethod
-    def update_state(self, y: int, x: int, type: ObjectType) -> None:
+    def update_state(
+        self, y: int, x: int, type: ObjectType, state: ObjectState
+    ) -> None:
         pass
 
 
 class IMoleSubject(metaclass=ABCMeta):
     @abstractmethod
-    def notify_mole_state(self) -> None:
+    def notify_mole_state(self, state: ObjectState) -> None:
         pass
 
     @abstractmethod
