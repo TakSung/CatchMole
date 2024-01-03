@@ -121,7 +121,7 @@ while True:
     if score >= 10:
         threading.Thread(target=auto_raise).start()
         score -= 9
-    t = ObjectType.NONE
+    t = ObjectType.none
     event = pg.event.poll()  # 이벤트 처리
 
     if event.type == QUIT:

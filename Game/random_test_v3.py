@@ -8,7 +8,7 @@ import random
 from icecream import ic
 
 from Domain.Interfaces.IMoleObserver import IMoleObserver
-from Common.ObjectType import ObjectType
+from Common import ObjectType, ObjectState
 
 from Domain.Entities.ObjFactory import *
 from Domain.Entities.MoleBoard import MoleBoard
@@ -59,7 +59,7 @@ def move_cursor(key):
         player.right()
     elif key == pg.K_k:
         (attack_y, attack_x) = player.get_cursor()
-        t=board.try_attack(attack_y, attack_x)
+        t = board.try_attack(attack_y, attack_x)
         effect = effect_image.get_rect(
             left=WIDTH / 3 * attack_x + 20, top=HEIGHT / 3 * attack_y + 20
         )
@@ -100,11 +100,14 @@ def print_room(y: int, x: int, type: ObjectType, is_cursor: bool):
             mole = mole_image.get_rect(left=WIDTH / 3 * x + 20, top=HEIGHT / 3 * y + 20)
             game_screen.blit(mole_image, mole)
 
+
 class RoomUpdater(IMoleObserver):
     def __init__(self, room_manager: RoomManager):
         self.room_manager = room_manager
 
-    def update_state(self, y: int, x: int, type: ObjectType) -> None:
+    def update_state(
+        self, y: int, x: int, type: ObjectType, state: ObjcetState
+    ) -> None:
         self.room_manager.set_obj(y, x, type)
 
 
@@ -136,12 +139,13 @@ def auto_raise():
         ic("raise mole", xr, yr)
         board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
 
+
 while True:
     threading.Thread(target=auto_raise).start()
     game_screen.fill(WHITE)
-    
+
     for _ in range(500):
-        t = ObjectType.NONE
+        t = ObjectType.none
         event = pg.event.poll()  # 이벤트 처리
 
         if event.type == QUIT:

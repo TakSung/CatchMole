@@ -23,7 +23,7 @@ class BoardPrinter(IBoardObserver):
             print(i, end="|")
             for j in range(cols):
                 match (type[i][j]):
-                    case ObjectType.NONE:
+                    case ObjectType.none:
                         print("X", end="|")
                     case _:
                         print("O", end="|")

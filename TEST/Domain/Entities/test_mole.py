@@ -49,7 +49,7 @@ class test_mole(unittest.TestCase):
         self.assertEqual(TYPE, self.mole_board.get_state(0, 0))
 
         self.mole.try_lower()
-        self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
+        self.assertEqual(ObjectType.none, self.mole_board.get_state(0, 0))
 
     def test_try_attack_1(self):
         print("\t\t", sys._getframe(0).f_code.co_name)
@@ -58,10 +58,11 @@ class test_mole(unittest.TestCase):
 
         type = self.mole.try_attack()
         self.assertEqual(ObjectType.BASIC_MOLE, type)
-        self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
+        self.assertEqual(ObjectType.none, self.mole_board.get_state(0, 0))
 
     def test_try_attack_2(self):
         from icecream import ic
+
         print("\t\t", sys._getframe(0).f_code.co_name)
         TYPE = self.mole.get_state()
         self.assertEqual(TYPE, self.mole_board.get_state(0, 0))
@@ -72,8 +73,8 @@ class test_mole(unittest.TestCase):
         self.assertEqual(ObjectType.BASIC_MOLE, type)
         print("\t\t\t", "re try_attack")
         type = self.mole.try_attack()
-        self.assertEqual(ObjectType.NONE, type)
-        self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
+        self.assertEqual(ObjectType.none, type)
+        self.assertEqual(ObjectType.none, self.mole_board.get_state(0, 0))
 
     def test_auto_lower(self):
         print("\t\t", sys._getframe(0).f_code.co_name)
@@ -81,7 +82,7 @@ class test_mole(unittest.TestCase):
         MAX = 10
         queue = []
         theads = []
-        results = [ObjectType.NONE] * MAX
+        results = [ObjectType.none] * MAX
 
         def attack(id: int):
             time.sleep(random.randint(0, 3) * 0.0001)
@@ -97,8 +98,8 @@ class test_mole(unittest.TestCase):
 
         for i in range(MAX):
             theads[i].join()
-        self.assertEqual(set([ObjectType.NONE]), set(results))
-        self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
+        self.assertEqual(set([ObjectType.none]), set(results))
+        self.assertEqual(ObjectType.none, self.mole_board.get_state(0, 0))
 
     def test_threading_try_attack_1(self):
         print("\t\t", sys._getframe(0).f_code.co_name)
@@ -106,7 +107,7 @@ class test_mole(unittest.TestCase):
         MAX = 10
         queue = []
         theads = []
-        results = [ObjectType.NONE] * MAX
+        results = [ObjectType.none] * MAX
 
         def attack(id: int):
             time.sleep(random.randint(0, 3) * 0.001)
@@ -122,9 +123,9 @@ class test_mole(unittest.TestCase):
         for i in range(MAX):
             theads[i].join()
         self.assertEqual(TYPE, results[queue[0]])
-        results[queue[0]] = ObjectType.NONE
-        self.assertEqual(set([ObjectType.NONE]), set(results))
-        self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
+        results[queue[0]] = ObjectType.none
+        self.assertEqual(set([ObjectType.none]), set(results))
+        self.assertEqual(ObjectType.none, self.mole_board.get_state(0, 0))
 
     def test_threading_try_attack_2(self):
         print("\t\t", sys._getframe(0).f_code.co_name)
@@ -132,7 +133,7 @@ class test_mole(unittest.TestCase):
         MAX = 10
         queue = []
         theads = []
-        results = [ObjectType.NONE] * MAX
+        results = [ObjectType.none] * MAX
 
         def attack_or_lower(id: int):
             if id == -1:
@@ -157,9 +158,9 @@ class test_mole(unittest.TestCase):
         frist = queue[0]
         if frist >= 0:
             self.assertEqual(TYPE, results[frist])
-            results[queue[0]] = ObjectType.NONE
-        self.assertEqual(set([ObjectType.NONE]), set(results))
-        self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
+            results[queue[0]] = ObjectType.none
+        self.assertEqual(set([ObjectType.none]), set(results))
+        self.assertEqual(ObjectType.none, self.mole_board.get_state(0, 0))
 
     def test_threading_try_attack_3(self):
         print("\t\t", sys._getframe(0).f_code.co_name)
@@ -167,7 +168,7 @@ class test_mole(unittest.TestCase):
         MAX = 10
         queue = []
         theads = []
-        results = [ObjectType.NONE] * MAX
+        results = [ObjectType.none] * MAX
 
         def attack_or_lower(id: int):
             if id != -1:
@@ -190,9 +191,9 @@ class test_mole(unittest.TestCase):
         frist = queue[0]
         if frist >= 0:
             self.assertEqual(TYPE, results[frist])
-            results[queue[0]] = ObjectType.NONE
-        self.assertEqual(set([ObjectType.NONE]), set(results))
-        self.assertEqual(ObjectType.NONE, self.mole_board.get_state(0, 0))
+            results[queue[0]] = ObjectType.none
+        self.assertEqual(set([ObjectType.none]), set(results))
+        self.assertEqual(ObjectType.none, self.mole_board.get_state(0, 0))
 
 
 if __name__ == "__main__":
