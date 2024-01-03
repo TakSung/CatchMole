@@ -7,6 +7,8 @@ This is a whack-a-mole discussion project in python.
 git clone https://github.com/TakSung/CatchMole.git
 cd CatchMole
 pip install -r requirements.txt
+
+python Game/random_test_v3.py
 ```
 
 # Test
