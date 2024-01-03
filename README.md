@@ -9,6 +9,15 @@ cd CatchMole
 pip install -r requirements.txt
 ```
 
+# Play Game
+### EXE
+```python
+python Game/random_test_v3.py
+```
+### 게임방법
+- 방향키
+- K를 누러면 두더지를 잡을 수 있음
+
 # Test
 ```bash
 python -m unittest TEST/Domain/Entities/test_board.py TEST/Domain/Entities/test_mole.py TEST/Application/GameManage/test_player_action_set.py
