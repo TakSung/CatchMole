@@ -7,9 +7,16 @@ This is a whack-a-mole discussion project in python.
 git clone https://github.com/TakSung/CatchMole.git
 cd CatchMole
 pip install -r requirements.txt
+```
 
+# Play Game
+### EXE
+```python
 python Game/random_test_v3.py
 ```
+### 게임방법
+- 방향키
+- K를 누러면 두더지를 잡을 수 있음
 
 # Test
 ```bash
