@@ -9,5 +9,3 @@ if not (root_path in sys.path):
 
 
 from Application.GameManage.PlayerActionSet import PlayerActionSet
-from Application.GameManage.PlayerManager import PlayerManager
-from  Application.GameManage.IConvertObjectToState import IConvertObjectToState
