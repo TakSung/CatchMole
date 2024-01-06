@@ -24,10 +24,11 @@ python -m unittest TEST/Domain/Entities/test_board.py TEST/Domain/Entities/test_
 python Game/random_test.py
 python Game/random_test_v2.py
 python Game/random_test_v3.py
+python Game/random_test_v4.py
 ```
 
 # 이미지 라이센스
-| image | url |
-|---|---|
-| hacker.png | https://www.flaticon.com/kr/free-icon/hacker_4228171 |
+| image        | url                                                         |
+| ------------ | ----------------------------------------------------------- |
+| hacker.png   | https://www.flaticon.com/kr/free-icon/hacker_4228171        |
 | boomboom.png | https://kor.pngtree.com/freepng/bomb-explosion_2503362.html |
