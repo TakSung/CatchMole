@@ -105,9 +105,12 @@ class RoomUpdater(IMoleObserver):
     def __init__(self, room_manager: RoomManager):
         self.room_manager = room_manager
 
-    def update_state(
-        self, y: int, x: int, type: ObjectType, state: ObjcetState
+    def alert_result(
+        self, y: int, x: int, type: ObjectType, state: ObjectState
     ) -> None:
+        pass
+
+    def update_mole(self, y: int, x: int, type: ObjectType) -> None:
         self.room_manager.set_obj(y, x, type)
 
 

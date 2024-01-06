@@ -5,7 +5,11 @@ from Common import ObjectType, ObjectState
 
 class IMoleObserver(metaclass=ABCMeta):
     @abstractmethod
-    def update_state(
+    def update_mole(self, y: int, x: int, type: ObjectType) -> None:
+        pass
+
+    @abstractmethod
+    def alert_result(
         self, y: int, x: int, type: ObjectType, state: ObjectState
     ) -> None:
         pass

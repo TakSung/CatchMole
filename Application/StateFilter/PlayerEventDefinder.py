@@ -56,9 +56,12 @@ class BoardPlayerLinker(IPlayerStateSubject, IMoleObserver):
         for obsr in observers:
             self.players.append(obsr)
 
-    def update_state(
+    def alert_result(
         self, y: int, x: int, type: ObjectType, state: ObjectState
     ) -> None:
+        pass
+
+    def update_mole(self, y: int, x: int, type: ObjectType, state: ObjectState) -> None:
         """_summary_
         mole이 전파한 정보를 업데이트 한다.
         인자로 받은 함수를 사용하여 스트레티지 하게 상태를 전파한다.

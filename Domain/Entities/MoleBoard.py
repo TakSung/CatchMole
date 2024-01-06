@@ -81,9 +81,12 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject, IMoleSubject):
     def try_attack(self, y: int, x: int) -> ObjectType:
         return self.board[y][x].try_attack()
 
-    def update_state(
+    def alert_result(
         self, y: int, x: int, type: ObjectType, state: ObjectState
     ) -> None:
+        pass
+
+    def update_mole(self, y: int, x: int, type: ObjectType) -> None:
         self.notify_board()
 
     def notify_mole_state(self, state: ObjectState) -> None:

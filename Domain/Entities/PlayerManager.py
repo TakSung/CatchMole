@@ -30,9 +30,12 @@ class PlayerManager(IMoleObserver, IPlayerStateSubject):
                 raise ValueError()
         self.register_player_state_observers(state_observers)
 
-    def update_state(
+    def alert_result(
         self, y: int, x: int, type: ObjectType, state: ObjectState
     ) -> None:
+        pass
+
+    def update_mole(self, y: int, x: int, type: ObjectType, state: ObjectState) -> None:
         pass
 
     def notify_player_state(self) -> None:

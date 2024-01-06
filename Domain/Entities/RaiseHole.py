@@ -22,6 +22,7 @@ class RaiseHole(IRaiseObj, IMoleSubject):
         self.x = x
         self.raise_obj = NoneObject()
         self.mole_observers: List[IMoleObserver] = []
+        self.before_type = ObjectType.none
         self.factory = factory
         match mole_observers:
             case obsr if isinstance(obsr, IMoleObserver):
@@ -58,6 +59,7 @@ class RaiseHole(IRaiseObj, IMoleSubject):
         raise_obj가 NoneObject이면 object_type으로 객체 생성
         """
         if self.raise_obj.get_state() == ObjectType.none:
+            self.before_type = self.raise_obj.get_state()
             self.raise_obj = self.factory.get_obj(object_type)
             self.notify_mole_state(ObjectState.RAISE_OBJECT)
             self.run_timer()
@@ -72,7 +74,8 @@ class RaiseHole(IRaiseObj, IMoleSubject):
         if self.mole_observers == None:
             return
         for obsv in self.mole_observers:
-            obsv.update_state(self.y, self.x, self.get_state(), state)
+            obsv.update_mole(self.y, self.x, self.get_state())
+            obsv.alert_result(self.y, self.x, self.before_type, state)
 
     def register_mole_observers(self, observers: Collection[IMoleObserver]) -> None:
         match observers:
@@ -88,21 +91,25 @@ class RaiseHole(IRaiseObj, IMoleSubject):
 
     ## 올라가 있을 때 내려가게 하고, 내려가 있으면 그냥 내비둔다.
     def try_lower(self) -> None:
+        before_type = self.get_state()
         self.raise_obj.try_lower()
         if self.raise_obj.get_state() == ObjectType.none and not isinstance(
             self.raise_obj, NoneObject
         ):
             self.set_none_object()
+            self.before_type = before_type
             self.notify_mole_state(ObjectState.LOW)
 
     ## 올라가 있을때 때리면 때린 객체의 종류를 받고, 내려가 있느면 아무것도 안해고 NONE 을 반환한다.
     def try_attack(self) -> ObjectType:
+        before_type = self.get_state()
         result = self.raise_obj.try_attack()
 
         if self.raise_obj.get_state() == ObjectType.none and not isinstance(
             self.raise_obj, NoneObject
         ):
             self.set_none_object()
+            self.before_type = before_type
             self.notify_mole_state(ObjectState.CATCHED)
 
         return result
