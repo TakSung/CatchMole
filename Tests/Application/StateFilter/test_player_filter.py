@@ -81,7 +81,7 @@ class test_player_filter(unittest.TestCase):
         # Nomal
         import time
 
-        time.sleep(self.time)
+        time.sleep(self.time + 0.1)
         self.assertEqual(PlayerState.Nomal, self.player.state)
         self.cursor.set(0, 0)
         self.assertEqual((0, 0), self.cursor.get())

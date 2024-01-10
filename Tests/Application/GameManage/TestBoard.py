@@ -19,7 +19,7 @@ class TestHalfHackerBoard(IBoard):
 
     def try_attack(self, y: int, x: int) -> ObjectType:
         match y:
-            case v if v >= 3:
+            case v if v <= 3:
                 return ObjectType.HACKER
             case _:
                 return ObjectType.BASIC_MOLE

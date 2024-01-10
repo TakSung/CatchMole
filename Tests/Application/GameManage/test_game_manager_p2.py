@@ -45,10 +45,10 @@ class test_game_manager_p2(unittest.TestCase):
         "Hook method for deconstructing the test fixture after testing it."
         print("\t", sys._getframe(0).f_code.co_name)
 
-    def test_p1_반전_p2의_공격(self):
+    def test_p2_이상한움직임들(self):
         "Hook method for deconstructing the test fixture after testing it."
         print("\t\t", sys._getframe(0).f_code.co_name)
-        self.player1.update_state(PlayerState.Reverse)
+        self.player2.try_attack()
 
         self.player1.right()
         self.assertEqual((0, 0), self.cursor1.get())
@@ -79,6 +79,160 @@ class test_game_manager_p2(unittest.TestCase):
         self.assertEqual((4, 4), self.cursor1.get())
 
         self.player1.left()
+        self.assertEqual((4, 4), self.cursor1.get())
+
+        # p2 move
+        self.player2.left()
+        self.assertEqual((0, 0), self.cursor2.get())
+
+        self.player2.right()
+        self.assertEqual((0, 1), self.cursor2.get())
+
+        self.player2.right()
+        self.assertEqual((0, 2), self.cursor2.get())
+
+        self.player2.right()
+        self.assertEqual((0, 3), self.cursor2.get())
+
+        self.player2.right()
+        self.assertEqual((0, 4), self.cursor2.get())
+
+        self.player2.right()
+        self.assertEqual((0, 4), self.cursor2.get())
+
+        self.player2.down()
+        self.assertEqual((0, 4), self.cursor2.get())
+
+        self.player2.up()
+        self.assertEqual((1, 4), self.cursor2.get())
+        self.player2.up()
+        self.assertEqual((2, 4), self.cursor2.get())
+        self.player2.up()
+        self.assertEqual((3, 4), self.cursor2.get())
+        self.player2.up()
+        self.assertEqual((4, 4), self.cursor2.get())
+        self.player2.up()
+        self.assertEqual((4, 4), self.cursor2.get())
+        self.player2.right()
+        self.assertEqual((4, 4), self.cursor2.get())
+
+        # Nomal
+        import time
+
+        time.sleep(self.time + 0.1)
+        self.assertEqual(PlayerState.Nomal, self.player1.state)
+        self.cursor1.set(0, 0)
+        self.assertEqual((0, 0), self.cursor1.get())
+
+        self.player1.left()
+        self.assertEqual((0, 0), self.cursor1.get())
+
+        self.player1.right()
+        self.assertEqual((0, 1), self.cursor1.get())
+
+        self.player1.right()
+        self.assertEqual((0, 2), self.cursor1.get())
+
+        self.player1.right()
+        self.assertEqual((0, 3), self.cursor1.get())
+
+        self.player1.right()
+        self.assertEqual((0, 4), self.cursor1.get())
+
+        self.player1.right()
+        self.assertEqual((0, 4), self.cursor1.get())
+
+        self.player1.down()
+        self.assertEqual((0, 4), self.cursor1.get())
+
+        self.player1.up()
+        self.assertEqual((1, 4), self.cursor1.get())
+        self.player1.up()
+        self.assertEqual((2, 4), self.cursor1.get())
+        self.player1.up()
+        self.assertEqual((3, 4), self.cursor1.get())
+        self.player1.up()
+        self.assertEqual((4, 4), self.cursor1.get())
+        self.player1.up()
+        self.assertEqual((4, 4), self.cursor1.get())
+        self.player1.right()
+        self.assertEqual((4, 4), self.cursor1.get())
+
+    def test_p1_반전_p2의_공격(self):
+        "Hook method for deconstructing the test fixture after testing it."
+        print("\t\t", sys._getframe(0).f_code.co_name)
+        self.player2.try_attack()
+
+        self.player1.right()
+        self.assertEqual((0, 0), self.cursor1.get())
+
+        self.player1.left()
+        self.assertEqual((0, 1), self.cursor1.get())
+        self.player1.left()
+        self.assertEqual((0, 2), self.cursor1.get())
+        self.player1.left()
+        self.assertEqual((0, 3), self.cursor1.get())
+        self.player1.left()
+        self.assertEqual((0, 4), self.cursor1.get())
+        self.player1.left()
+        self.assertEqual((0, 4), self.cursor1.get())
+
+        self.player1.up()
+        self.assertEqual((0, 4), self.cursor1.get())
+
+        self.player1.down()
+        self.assertEqual((1, 4), self.cursor1.get())
+        self.player1.down()
+        self.assertEqual((2, 4), self.cursor1.get())
+        self.player1.down()
+        self.assertEqual((3, 4), self.cursor1.get())
+        self.player1.down()
+        self.assertEqual((4, 4), self.cursor1.get())
+        self.player1.down()
+        self.assertEqual((4, 4), self.cursor1.get())
+
+        self.player1.left()
+        self.assertEqual((4, 4), self.cursor1.get())
+        # Nomal
+        import time
+
+        time.sleep(self.time + 0.1)
+        self.assertEqual(PlayerState.Nomal, self.player1.state)
+        self.cursor1.set(0, 0)
+        self.assertEqual((0, 0), self.cursor1.get())
+
+        self.player1.left()
+        self.assertEqual((0, 0), self.cursor1.get())
+
+        self.player1.right()
+        self.assertEqual((0, 1), self.cursor1.get())
+
+        self.player1.right()
+        self.assertEqual((0, 2), self.cursor1.get())
+
+        self.player1.right()
+        self.assertEqual((0, 3), self.cursor1.get())
+
+        self.player1.right()
+        self.assertEqual((0, 4), self.cursor1.get())
+
+        self.player1.right()
+        self.assertEqual((0, 4), self.cursor1.get())
+
+        self.player1.down()
+        self.assertEqual((0, 4), self.cursor1.get())
+
+        self.player1.up()
+        self.assertEqual((1, 4), self.cursor1.get())
+        self.player1.up()
+        self.assertEqual((2, 4), self.cursor1.get())
+        self.player1.up()
+        self.assertEqual((3, 4), self.cursor1.get())
+        self.player1.up()
+        self.assertEqual((4, 4), self.cursor1.get())
+        self.player1.up()
+        self.assertEqual((4, 4), self.cursor1.get())
+        self.player1.right()
         self.assertEqual((4, 4), self.cursor1.get())
 
     def test_p1_반전(self):
