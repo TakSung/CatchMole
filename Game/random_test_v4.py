@@ -163,13 +163,10 @@ def auto_raise():
         t = random.randrange(0, 1000)
         ic("raise mole", xr, yr)
         if t < 334:
-            ic(t, ObjectType.BOMB)
             board.raise_obj(yr, xr, type=ObjectType.BOMB)
         elif 333 < t < 901:
-            ic(t, ObjectType.BASIC_MOLE)
             board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
         else:
-            ic(t, ObjectType.GOLD_MOLE)
             board.raise_obj(yr, xr, type=ObjectType.GOLD_MOLE)
 
 
