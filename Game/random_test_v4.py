@@ -34,10 +34,12 @@ mole_image = pg.image.load("mole.png")
 gold_mole_image = pg.image.load("gold_mole.png")
 bomb_image = pg.image.load("bomb.webp")
 effect_image = pg.image.load("boom.png")
+red_bomb_image = pg.image.load("red_bomb.png")
 mole_image = pg.transform.scale(mole_image, (120, 100))
 gold_mole_image = pg.transform.scale(gold_mole_image, (120, 100))
 effect_image = pg.transform.scale(effect_image, (120, 100))
 bomb_image = pg.transform.scale(bomb_image, (120, 100))
+red_bomb_image = pg.transform.scale(red_bomb_image, (120, 100))
 
 fps = 30
 
@@ -116,6 +118,11 @@ def print_room(y: int, x: int, type: ObjectType, is_cursor: bool):
                 left=BOARD_WIDTH / 4 * x + 38, top=HEIGHT / 4 * y + 40
             )
             game_screen.blit(gold_mole_image, gold_mole)
+        case ObjectType.RED_BOMB:
+            red_bomb = red_bomb_image.get_rect(
+                left=BOARD_WIDTH / 4 * x + 38, top=HEIGHT / 4 * y + 40
+            )
+            game_screen.blit(red_bomb_image, red_bomb)
 
 
 class RoomUpdater(IMoleObserver):
@@ -128,7 +135,16 @@ class RoomUpdater(IMoleObserver):
     def alert_result(
         self, y: int, x: int, type: ObjectType, state: ObjectState
     ) -> None:
-        pass
+        if type == ObjectType.GOLD_MOLE and state == ObjectState.LOW:
+            board.raise_obj(y, x, type=ObjectType.RED_BOMB)
+        if state == ObjectState.CATCHED:
+            effect_image = effect_image.get_rect(
+                left=BOARD_WIDTH / 4 * x + 38, top=HEIGHT / 4 * y + 40
+            )
+
+            
+            
+    
 
 
 pg.font.init()  # you have to call this at the start,
@@ -144,16 +160,16 @@ def convert_score(type: ObjectType) -> int:
         case ObjectType.BOMB:
             return -3
         case ObjectType.GOLD_MOLE:
-            return 5
+            return 9
+        case ObjectType.RED_BOMB:
+            return -10
         case _:
             return 0
-
 
 board = MoleBoard(mole_observers=[RoomUpdater(room_manager)], factory=TestObjFactory(4))
 
 import threading
 import time
-
 
 def auto_raise():
     for _ in range(90):
@@ -164,7 +180,7 @@ def auto_raise():
         ic("raise mole", xr, yr)
         if t < 334:
             board.raise_obj(yr, xr, type=ObjectType.BOMB)
-        elif 333 < t < 901:
+        elif 333 < t < 951:
             board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
         else:
             board.raise_obj(yr, xr, type=ObjectType.GOLD_MOLE)
