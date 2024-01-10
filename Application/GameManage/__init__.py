@@ -8,4 +8,5 @@ if not (root_path in sys.path):
     sys.path.append(root_path)
 
 
-from Application.GameManage.PlayerActionSet import PlayerActionSet
+from Application.GameManage.PlayerActor import PlayerActor, PlayerCursorControl
+from Application.GameManage.GameManager import OneBoardGameManager

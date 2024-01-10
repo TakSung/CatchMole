@@ -24,3 +24,7 @@ class IBoard(metaclass=ABCMeta):
     @abstractmethod
     def try_attack(self, y: int, x: int) -> ObjectType:
         pass
+
+    @abstractmethod
+    def get_size(self) -> int:
+        pass

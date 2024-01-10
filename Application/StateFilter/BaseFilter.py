@@ -18,7 +18,7 @@ class DebuffFilter(IConvertObjectToState):
 
     def convert(self, y: int, x: int, type: ObjectType) -> Tuple[PlayerState, float]:
         match type:
-            case ObjectType.BASIC_MOLE:
+            case ObjectType.HACKER:
                 return (PlayerState.Reverse, self.time)
             case _:
                 return (PlayerState.Nomal, 0)

@@ -1,7 +1,7 @@
 import __init__
 
 from collections.abc import Collection
-from typing import Tuple, Union, List
+from typing import List
 
 from Common import PlayerState, ObjectType, ObjectState
 from Domain.Interfaces import (
@@ -14,7 +14,7 @@ from Domain.Interfaces import (
 from Application.StateFilter import IConvertObjectToState
 
 
-class BoardPlayerLinker(IPlayerStateSubject, IMoleObserver):
+class ObjectPlayerLinker(IPlayerStateSubject, IMoleObserver):
     """_summary_
     플레이어 상태와 두더지 잡은 상태를 연결시켜준다
 
@@ -59,9 +59,6 @@ class BoardPlayerLinker(IPlayerStateSubject, IMoleObserver):
     def alert_result(
         self, y: int, x: int, type: ObjectType, state: ObjectState
     ) -> None:
-        pass
-
-    def update_mole(self, y: int, x: int, type: ObjectType, state: ObjectState) -> None:
         """_summary_
         mole이 전파한 정보를 업데이트 한다.
         인자로 받은 함수를 사용하여 스트레티지 하게 상태를 전파한다.
@@ -71,11 +68,27 @@ class BoardPlayerLinker(IPlayerStateSubject, IMoleObserver):
             x (int): _description_
             type (ObjectType): _description_
         """
-        (state, time) = self.converter.convert(y, x, type)
-        for p in self.players:
-            p.update_state(state)
+        match state:
+            case ObjectState.CATCHED:
+                (state, time) = self.converter.convert(y, x, type)
+                for p in self.players:
+                    p.update_state(state)
 
-        self.run_timer(time)
+                self.run_timer(time)
+            case _:
+                print(f"not defined '{state}' in ObjectPlayerLinker.alert_result")
+
+    def update_mole(self, y: int, x: int, type: ObjectType) -> None:
+        """_summary_
+        mole이 전파한 정보를 업데이트 한다.
+        인자로 받은 함수를 사용하여 스트레티지 하게 상태를 전파한다.
+        일정시간이 지난 이후 노멀상태로 돌아가게 한다.
+        Args:
+            y (int): _description_:
+            x (int): _description_
+            type (ObjectType): _description_
+        """
+        pass
 
     def run_timer(self, time: float):
         """_summary_
@@ -88,38 +101,10 @@ class BoardPlayerLinker(IPlayerStateSubject, IMoleObserver):
             return
 
         import threading
-        import time
+        import time as timer
 
         def auto_nomal():
-            time.sleep(time)
+            timer.sleep(time)
             self.notify_player_state()
 
         threading.Thread(target=auto_nomal).start()
-
-
-class PlayerEventDefinder:
-    def __init__(
-        self,
-        trigger_matchs: Union[
-            Collection[
-                Tuple[
-                    Collection[IPlayerStateObserver],
-                    IMoleSubject,
-                    IConvertObjectToState,
-                ]
-            ],
-            None,
-        ] = None,
-    ):
-        self.other_list: List[BoardPlayerLinker] = []
-        self.my_list: List[BoardPlayerLinker] = []
-        match trigger_matchs:
-            case matchs if isinstance(matchs, Collection):
-                for item in matchs:
-                    self.other_list.append(BoardPlayerLinker(item[0], item[1], item[2]))
-            case none if none is None:
-                pass
-            case _:
-                raise ValueError(
-                    f"PlayerEventDefinder.to_other_matchs> Collection[Tuple[Collection, IMoleSubject, IConvertObjectToState]]"
-                )

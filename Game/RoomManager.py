@@ -7,7 +7,7 @@ from Domain.Interfaces.IBoardObserver import IBoardObserver
 from Common.ObjectType import ObjectType
 
 from Domain.Entities.MoleBoard import MoleBoard
-from Application.GameManage import PlayerActionSet
+from Application.GameManage import PlayerActor
 
 
 class GUIRoom:

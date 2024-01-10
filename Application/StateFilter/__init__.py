@@ -9,8 +9,5 @@ if not (root_path in sys.path):
 
 
 from Application.StateFilter.IConvertObjectToState import IConvertObjectToState
-from Application.StateFilter.PlayerEventDefinder import (
-    PlayerEventDefinder,
-    BoardPlayerLinker,
-)
+from Application.StateFilter.ObjectPlayerLinker import ObjectPlayerLinker
 from Application.StateFilter.BaseFilter import BuffFilter, DebuffFilter
