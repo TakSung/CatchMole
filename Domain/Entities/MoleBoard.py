@@ -111,6 +111,9 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject, IMoleSubject):
         for obsv in self.observers:
             obsv.update_board(self.get_board_state())
 
+    def get_size(self) -> int:
+        return self.size[0]
+
     def print(self, tab: int = 2):
         for _ in range(tab):
             print("\t", end="")

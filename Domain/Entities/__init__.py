@@ -8,4 +8,5 @@ if not (root_path in sys.path):
     sys.path.append(root_path)
 
 from Domain.Entities.RaiseHole import RaiseHole
+from Domain.Entities.MoleBoard import MoleBoard
 from Domain.Entities.ObjFactory import ObjFactory, IObjFactory, TestObjFactory

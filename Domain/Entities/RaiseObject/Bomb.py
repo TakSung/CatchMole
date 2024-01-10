@@ -4,16 +4,17 @@ from Domain.Interfaces.IRaiseObj import IRaiseObj
 from Common.ObjectType import ObjectType
 import threading
 
+
 class Bomb(IRaiseObj):
     # 두더지가 생성된 시점부터 일어나 있음 -> state
     # 두더지가 특정 시간이 지나면 저절로 아래로 내려감
-    def __init__(self, timer: Union[int,float] = 10):
+    def __init__(self, timer: Union[int, float] = 10):
         # 두더지가 특정 시간이 지나면 저절로 아래로 내려감
         self.state = True  # raise
         self.type = ObjectType.BOMB
         self.lock = threading.Lock()
         self.set_timer(timer)
-        
+
     def try_lower(self) -> None:
         if not self.state:
             return
@@ -23,9 +24,8 @@ class Bomb(IRaiseObj):
             self.state = False
         self.lock.release()
 
-        
     def try_attack(self) -> ObjectType:
-        result = ObjectType.NONE
+        result = ObjectType.none
 
         self.lock.acquire()
         if self.state:
@@ -39,8 +39,4 @@ class Bomb(IRaiseObj):
         if self.state:
             return self.type
         else:
-            return ObjectType.NONE
-        
-    
-
-    
+            return ObjectType.none
