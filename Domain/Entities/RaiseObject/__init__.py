@@ -11,3 +11,4 @@ from Domain.Entities.RaiseObject.Mole import Mole
 from Domain.Entities.RaiseObject.NoneObject import NoneObject
 from Domain.Entities.RaiseObject.Bomb import Bomb
 from Domain.Entities.RaiseObject.Gold_Mole import Gold_Mole
+from Domain.Entities.RaiseObject.Hacker import Hacker
