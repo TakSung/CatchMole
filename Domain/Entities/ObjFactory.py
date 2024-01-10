@@ -20,6 +20,10 @@ class ObjFactory(IObjFactory):
                 obj = NoneObject()
             case ObjectType.BASIC_MOLE:
                 obj = Mole()
+            case ObjectType.BOMB:
+                obj = Bomb()
+            case ObjectType.GOLD_MOLE:
+                obj = Gold_Mole()
         return obj
 
 
@@ -34,4 +38,8 @@ class TestObjFactory(IObjFactory):
                 obj = NoneObject()
             case ObjectType.BASIC_MOLE:
                 obj = Mole(self.time)
+            case ObjectType.BOMB:
+                obj = Bomb()
+            case ObjectType.GOLD_MOLE:
+                obj = Gold_Mole(self.time)
         return obj
