@@ -20,7 +20,7 @@ python Game/random_test_v3.py
 
 # Test
 ```bash
-python -m unittest TEST/Domain/Entities/test_board.py TEST/Domain/Entities/test_mole.py TEST/Application/GameManage/test_player_action_set.py TEST/Application/StateFilter/test_player_state_definder.py
+python -m unittest Tests/Domain/Entities/test_board.py Tests/Domain/Entities/test_mole.py Tests/Application/GameManage/test_player_cursor_control.py Tests/Application/StateFilter/test_player_filter.py
 python Game/random_test.py
 python Game/random_test_v2.py
 python Game/random_test_v3.py
