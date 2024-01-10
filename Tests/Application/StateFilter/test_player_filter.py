@@ -5,7 +5,6 @@ from icecream import ic
 
 from Common import PlayerState, ObjectType
 from Domain.Entities.Cursor import Cursor
-from Domain.Entities import RaiseHole, TestObjFactory
 from Application.GameManage import PlayerActor, OneBoardGameManager
 from Application.StateFilter import BuffFilter, DebuffFilter
 
@@ -46,6 +45,7 @@ class test_player_filter(unittest.TestCase):
         print("\t\t", sys._getframe(0).f_code.co_name)
         hacker = self.player.try_attack()
         self.assertEqual(ObjectType.HACKER, hacker)
+        self.assertEqual(PlayerState.Reverse, self.player.state)
 
         self.player.right()
         self.assertEqual((0, 0), self.cursor.get())
@@ -82,6 +82,7 @@ class test_player_filter(unittest.TestCase):
         import time
 
         time.sleep(self.time)
+        self.assertEqual(PlayerState.Nomal, self.player.state)
         self.cursor.set(0, 0)
         self.assertEqual((0, 0), self.cursor.get())
 
@@ -124,6 +125,7 @@ class test_player_filter(unittest.TestCase):
         print("\t\t", sys._getframe(0).f_code.co_name)
         hacker = self.player.try_attack()
         self.assertEqual(ObjectType.HACKER, hacker)
+        self.assertEqual(PlayerState.Reverse, self.player.state)
 
         self.player.right()
         self.assertEqual((0, 0), self.cursor.get())

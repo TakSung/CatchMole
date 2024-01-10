@@ -6,3 +6,5 @@ root_path = str(now_path.parent.parent.parent)
 
 if not (root_path in sys.path):
     sys.path.append(root_path)
+
+from Tests.Application.GameManage.TestBoard import TestHalfHackerBoard
