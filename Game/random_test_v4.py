@@ -12,7 +12,9 @@ from Common import ObjectType, ObjectState
 
 from Domain.Entities.ObjFactory import *
 from Domain.Entities.MoleBoard import MoleBoard
-from Application.GameManage import PlayerCursorControl
+from Application.GameManage import PlayerCursorControl, OneBoardGameManager
+from Application.StateFilter import DebuffFilter, ObjectPlayerLinker
+
 from Game.RoomManager import RoomManager
 
 clock = pg.time.Clock()
@@ -33,9 +35,11 @@ line_color = (0, 0, 0)
 mole_image = pg.image.load("mole.png")
 gold_mole_image = pg.image.load("gold_mole.png")
 bomb_image = pg.image.load("bomb.webp")
+hacker_image = pg.image.load("hacker.png")
 effect_image = pg.image.load("boom.png")
 mole_image = pg.transform.scale(mole_image, (120, 100))
 gold_mole_image = pg.transform.scale(gold_mole_image, (120, 100))
+hacker_image = pg.transform.scale(hacker_image, (120, 100))
 effect_image = pg.transform.scale(effect_image, (120, 100))
 bomb_image = pg.transform.scale(bomb_image, (120, 100))
 
@@ -49,11 +53,11 @@ room_manager = RoomManager(4)
 pg.display.set_caption("Test")
 
 
-def move_cursor(key):
+def move_cursor(key, player):
     global cursor_x, cursor_y
-    global player
     global score
 
+    (cursor_y, cursor_x) = player.get_cursor()
     if key == pg.K_UP:
         player.down()
     elif key == pg.K_DOWN:
@@ -63,21 +67,15 @@ def move_cursor(key):
     elif key == pg.K_RIGHT:
         player.right()
     elif key == pg.K_k:
-        (attack_y, attack_x) = player.get_cursor()
-        t = board.try_attack(attack_y, attack_x)
-        effect = effect_image.get_rect(
-            left=BOARD_WIDTH / 4 * attack_x + 20, top=HEIGHT / 4 * attack_y + 20
-        )
-        game_screen.blit(effect_image, effect)
+        t = player.try_attack()
+        # effect = effect_image.get_rect(
+        #     left=BOARD_WIDTH / 4 * cursor_x + 20, top=HEIGHT / 4 * cursor_y + 20
+        # )
+        # game_screen.blit(effect_image, effect)
         score += convert_score(t)
 
     (cursor_y, cursor_x) = player.get_cursor()
     room_manager.set_curser(cursor_y, cursor_x)
-
-
-# 게임 변수 설정
-player = PlayerCursorControl(4)
-cursor_x, cursor_y = 0, 0
 
 
 def print_room(y: int, x: int, type: ObjectType, is_cursor: bool):
@@ -111,6 +109,11 @@ def print_room(y: int, x: int, type: ObjectType, is_cursor: bool):
                 left=BOARD_WIDTH / 4 * x + 38, top=HEIGHT / 4 * y + 40
             )
             game_screen.blit(bomb_image, bomb)
+        case ObjectType.HACKER:
+            hacker = hacker_image.get_rect(
+                left=BOARD_WIDTH / 4 * x + 38, top=HEIGHT / 4 * y + 40
+            )
+            game_screen.blit(hacker_image, hacker)
         case ObjectType.GOLD_MOLE:
             gold_mole = gold_mole_image.get_rect(
                 left=BOARD_WIDTH / 4 * x + 38, top=HEIGHT / 4 * y + 40
@@ -131,6 +134,17 @@ class RoomUpdater(IMoleObserver):
         pass
 
 
+# 게임 변수 설정
+board = MoleBoard(mole_observers=[RoomUpdater(room_manager)])
+debuff = DebuffFilter(4)
+manager = OneBoardGameManager(
+    board=board,
+    player_num=1,
+    buff_filter=debuff,
+)
+player = manager.player_list[0]
+cursor_x, cursor_y = 0, 0
+
 pg.font.init()  # you have to call this at the start,
 # if you want to use this module.
 my_font = pg.font.SysFont("Comic Sans MS", 30)
@@ -149,8 +163,6 @@ def convert_score(type: ObjectType) -> int:
             return 0
 
 
-board = MoleBoard(mole_observers=[RoomUpdater(room_manager)], factory=TestObjFactory(4))
-
 import threading
 import time
 
@@ -162,9 +174,11 @@ def auto_raise():
         yr = random.randrange(0, 4)
         t = random.randrange(0, 1000)
         ic("raise mole", xr, yr)
-        if t < 334:
+        if t < 200:
             board.raise_obj(yr, xr, type=ObjectType.BOMB)
-        elif 333 < t < 901:
+        elif t < 400:
+            board.raise_obj(yr, xr, type=ObjectType.HACKER)
+        elif t < 951:
             board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
         else:
             board.raise_obj(yr, xr, type=ObjectType.GOLD_MOLE)
@@ -183,7 +197,7 @@ while True:
             pg.quit()
             sys.exit()
         elif event.type == pg.KEYDOWN:  # 키 입력을 처리
-            move_cursor(event.key)
+            move_cursor(event.key, player)
 
         for item in room_manager.get_changed_list():
             (y, x, type, cursor) = item
