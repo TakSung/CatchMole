@@ -19,13 +19,15 @@ class ObjFactory(IObjFactory):
             case ObjectType.none:
                 obj = NoneObject()
             case ObjectType.HACKER:
-                obj = Hacker()
+                obj = Hacker(5)
             case ObjectType.BASIC_MOLE:
-                obj = Mole()
+                obj = Mole(5)
             case ObjectType.BOMB:
-                obj = Bomb()
+                obj = Bomb(5)
             case ObjectType.GOLD_MOLE:
-                obj = Gold_Mole()
+                obj = Gold_Mole(2)
+            case ObjectType.RED_BOMB:
+                obj = Red_Bomb()
             case _:
                 obj = NoneObject()
                 print(f"Not Exist {type} in ObjFactory")
@@ -49,6 +51,8 @@ class TestObjFactory(IObjFactory):
                 obj = Bomb()
             case ObjectType.GOLD_MOLE:
                 obj = Gold_Mole(self.time)
+            case ObjectType.RED_BOMB:
+                obj = Red_Bomb(self.time)
             case _:
                 obj = NoneObject()
                 print(f"Not Exist {type} in ObjFactory")

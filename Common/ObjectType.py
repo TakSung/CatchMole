@@ -7,6 +7,7 @@ class ObjectType(IntEnum):
     HACKER = 2
     BOMB = 3
     GOLD_MOLE = 4
+    RED_BOMB = 5
 
 
 def get_object_type(i: int) -> ObjectType:
