@@ -131,6 +131,7 @@ def print_room(y: int, x: int, type: ObjectType, is_cursor: bool):
 class RoomUpdater(IMoleObserver):
     def __init__(self, room_manager: RoomManager):
         self.room_manager = room_manager
+        self.render_effect_image = None
 
     def update_mole(self, y: int, x: int, type: ObjectType) -> None:
         self.room_manager.set_obj(y, x, type)
@@ -141,13 +142,19 @@ class RoomUpdater(IMoleObserver):
         if type == ObjectType.GOLD_MOLE and state == ObjectState.LOW:
             board.raise_obj(y, x, type=ObjectType.RED_BOMB)
         if state == ObjectState.CATCHED:
-            effect_image = effect_image.get_rect(
+            self.render_effect_image = effect_image.get_rect(
                 left=BOARD_WIDTH / 4 * x + 38, top=HEIGHT / 4 * y + 40
             )
 
+    def rend_effect(self):
+        if self.render_effect_image is not None:
+            game_screen.blit(effect_image, self.render_effect_image)
+            self.render_effect_image = None
+
 
 # 게임 변수 설정
-board = MoleBoard(mole_observers=[RoomUpdater(room_manager)])
+updater = RoomUpdater(room_manager)
+board = MoleBoard(mole_observers=[updater])
 debuff = DebuffFilter(4)
 manager = OneBoardGameManager(
     board=board,
@@ -216,6 +223,7 @@ while True:
         for item in room_manager.get_changed_list():
             (y, x, type, cursor) = item
             print_room(y, x, type, cursor)
+        updater.rend_effect()
         text_surface = my_font.render(f"Score : {score}", False, (0, 0, 0))
         pg.draw.rect(game_screen, WHITE, [800, 0, 200, 800], 1000)
         game_screen.blit(text_surface, (810, 0))
