@@ -12,11 +12,14 @@ pip install -r requirements.txt
 # Play Game
 ### EXE
 ```python
-python Game/random_test_v3.py
+python Game/random_test_v4.py
 ```
-### 게임방법
-- 방향키
-- K를 누러면 두더지를 잡을 수 있음
+### 게임방법 & 설명 
+- 방향키로 커서 이동 and K를 누러면 두더지를 잡을 수 있음
+- 두더지 잡으면 +1점 획득
+- 해커를 누르면 방향키가 3초간 바뀜(버그 있음)
+- 황금두더지는 7번 때려야 잡힘. 9점 획득
+- 폭탄은 -3점, 빨간폭탄은 -10점 감점
 
 # Test
 ```bash
