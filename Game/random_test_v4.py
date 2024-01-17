@@ -177,9 +177,11 @@ def convert_score(type: ObjectType) -> int:
         case ObjectType.BOMB:
             return -3
         case ObjectType.GOLD_MOLE:
-            return 9
+            return 20
         case ObjectType.RED_BOMB:
             return -10
+        case ObjectType.HACKER:
+            return 5
         case _:
             return 0
 
