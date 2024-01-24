@@ -60,21 +60,18 @@ def move_cursor(key, player):
     global score
 
     (cursor_y, cursor_x) = player.get_cursor()
-    if key == pg.K_UP:
-        player.down()
-    elif key == pg.K_DOWN:
-        player.up()
-    elif key == pg.K_LEFT:
-        player.left()
-    elif key == pg.K_RIGHT:
-        player.right()
-    elif key == pg.K_k:
-        t = player.try_attack()
-        # effect = effect_image.get_rect(
-        #     left=BOARD_WIDTH / 4 * cursor_x + 20, top=HEIGHT / 4 * cursor_y + 20
-        # )
-        # game_screen.blit(effect_image, effect)
-        score += convert_score(t)
+    match key:
+        case pg.K_UP:
+            player.down()
+        case pg.K_DOWN:
+            player.up()
+        case pg.K_LEFT:
+            player.left()
+        case pg.K_RIGHT:
+            player.right()
+        case pg.K_k | pg.K_SPACE | pg.K_TAB:
+            t = player.try_attack()
+            score += convert_score(t)
 
     (cursor_y, cursor_x) = player.get_cursor()
     room_manager.set_curser(cursor_y, cursor_x)
@@ -158,7 +155,7 @@ board = MoleBoard(mole_observers=[updater])
 debuff = DebuffFilter(4)
 manager = OneBoardGameManager(
     board=board,
-    player_num=1,
+    player_num=2,
     buff_filter=debuff,
 )
 player = manager.player_list[0]
