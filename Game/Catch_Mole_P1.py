@@ -188,20 +188,23 @@ import time
 
 
 def auto_raise():
-    for _ in range(90):
-        time.sleep(1)
-        xr = random.randrange(0, 4)
-        yr = random.randrange(0, 4)
-        t = random.randrange(0, 1000)
-        ic("raise mole", xr, yr)
-        if t < 200:
-            board.raise_obj(yr, xr, type=ObjectType.BOMB)
-        elif t < 400:
-            board.raise_obj(yr, xr, type=ObjectType.HACKER)
-        elif t < 951:
-            board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
-        else:
-            board.raise_obj(yr, xr, type=ObjectType.GOLD_MOLE)
+    try:
+        for _ in range(90):
+            time.sleep(1)
+            xr = random.randrange(0, 4)
+            yr = random.randrange(0, 4)
+            t = random.randrange(0, 1000)
+            ic("raise mole", xr, yr)
+            if t < 200:
+                board.raise_obj(yr, xr, type=ObjectType.BOMB)
+            elif t < 400:
+                board.raise_obj(yr, xr, type=ObjectType.HACKER)
+            elif t < 951:
+                board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
+            else:
+                board.raise_obj(yr, xr, type=ObjectType.GOLD_MOLE)
+    except:
+        pass
 
 
 game_screen.fill(WHITE)
