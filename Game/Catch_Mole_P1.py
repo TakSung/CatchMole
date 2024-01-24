@@ -62,13 +62,13 @@ def move_cursor(key, player):
 
     (cursor_y, cursor_x) = player.get_cursor()
     match key:
-        case pg.K_UP:
+        case pg.K_UP | pg.K_KP8:
             player.down()
-        case pg.K_DOWN:
+        case pg.K_DOWN | pg.K_KP5:
             player.up()
-        case pg.K_LEFT:
+        case pg.K_LEFT | pg.K_KP4:
             player.left()
-        case pg.K_RIGHT:
+        case pg.K_RIGHT | pg.K_KP6:
             player.right()
         case pg.K_k | pg.K_SPACE | pg.K_TAB:
             t = player.try_attack()
