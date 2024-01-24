@@ -241,7 +241,10 @@ while True:
         elif event.type == pg.KEYDOWN:  # 키 입력을 처리
             move_cursor(event.key, player)
 
-        for item in room_manager.get_changed_list():
+        chaged_rooms = room_manager.get_changed_list()
+        room_manager.check_room()
+
+        for item in chaged_rooms:
             (y, x, type, cursor) = item
             print_room(y, x, type, cursor)
         updater.rend_effect()
@@ -252,7 +255,6 @@ while True:
         pg.draw.rect(game_screen, WHITE, [800, 40, 200, 800], 1000)
         game_screen.blit(text_surface, (810, 40))
         pg.display.update()
-        room_manager.check_room()
         clock.tick(30)
     threading.Thread(target=auto_raise).start()
 
