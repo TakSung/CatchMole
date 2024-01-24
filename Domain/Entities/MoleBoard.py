@@ -2,7 +2,7 @@ from abc import ABCMeta
 import __init__
 from icecream import ic
 
-from typing import List, Union
+from typing import List, Union, Tuple
 from collections.abc import Collection
 from Domain.Interfaces.IBoard import IBoard
 from Domain.Interfaces.IRaiseObj import IRaiseObj
@@ -15,25 +15,45 @@ from Domain.Entities.RaiseHole import RaiseHole
 
 
 class MoleBoard(IBoard, IMoleObserver, IBoardSubject, IMoleSubject):
-    size = (4, 4)
-
     def empty_board(
-        mole_observers: Collection[IMoleObserver], factory: IObjFactory
+        size: Tuple[int, int],
+        mole_observers: Collection[IMoleObserver],
+        factory: IObjFactory,
     ) -> List[List[RaiseHole]]:
+        """_summary_
+
+        Args:
+            size (Tuple[int,int]): y, x cordinate
+            mole_observers (Collection[IMoleObserver]): _description_
+            factory (IObjFactory): _description_
+
+        Returns:
+            List[List[RaiseHole]]: _description_
+        """
         return [
-            [RaiseHole(y, x, mole_observers, factory) for x in range(MoleBoard.size[1])]
-            for y in range(MoleBoard.size[0])
+            [RaiseHole(y, x, mole_observers, factory) for x in range(size[1])]
+            for y in range(size[0])
         ]
 
-    def empty_board_state() -> List[List[ObjectType]]:
-        return [[ObjectType.none] * MoleBoard.size[1] for _ in range(MoleBoard.size[0])]
+    def empty_board_state(size: Tuple[int, int]) -> List[List[ObjectType]]:
+        """_summary_
+
+        Args:
+            size (Tuple[int,int]): y,x cordinate
+
+        Returns:
+            List[List[ObjectType]]: _description_
+        """
+        return [[ObjectType.none] * size[1] for _ in range(size[0])]
 
     def __init__(
         self,
+        size: Tuple[int, int] = (4, 4),
         board_observers: Union[List[IBoardObserver], IBoardObserver] = [],
         mole_observers: Union[List[IMoleObserver], IMoleObserver] = [],
         factory: IObjFactory = ObjFactory(),
     ):
+        self.size = size
         self.board_observers: List[IBoardObserver] = []
         match board_observers:
             case obsr if isinstance(obsr, IBoardObserver):
@@ -44,7 +64,9 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject, IMoleSubject):
                 raise ValueError()
 
         self.register_board_observers(observers)
-        self.board: List[List[RaiseHole]] = MoleBoard.empty_board([self], factory)
+        self.board: List[List[RaiseHole]] = MoleBoard.empty_board(
+            self.get_size(), [self], factory
+        )
         self.notify_board()
 
         match mole_observers:
@@ -111,8 +133,8 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject, IMoleSubject):
         for obsv in self.board_observers:
             obsv.update_board(self.get_board_state())
 
-    def get_size(self) -> int:
-        return self.size[0]
+    def get_size(self) -> Tuple[int, int]:
+        return self.size
 
     def print(self, tab: int = 2):
         for _ in range(tab):

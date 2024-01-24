@@ -14,7 +14,7 @@ from Application.KeyAction import (
 
 
 class PlayerCursorControl(IPlayerStateObserver):
-    def __init__(self, size: int):
+    def __init__(self, size: Tuple[int, int]):
         self.cursor = Cursor(size)
         self.right_action = PlayerRightArrowAction(self.cursor)
         self.left_action = PlayerLeftArrowAction(self.cursor)

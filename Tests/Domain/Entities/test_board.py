@@ -37,10 +37,12 @@ class test_mole(unittest.TestCase):
         """_summary_"""
         print("\t\t", sys._getframe(0).f_code.co_name)
         self.assertEqual(
-            MoleBoard.empty_board_state(), self.mole_board.get_board_state()
+            MoleBoard.empty_board_state(self.mole_board.get_size()),
+            self.mole_board.get_board_state(),
         )
         self.assertEqual(
-            MoleBoard.empty_board_state(), self.mole_board.get_board_state()
+            MoleBoard.empty_board_state(self.mole_board.get_size()),
+            self.mole_board.get_board_state(),
         )
 
     def test_raise_obj_1(self):
@@ -49,7 +51,7 @@ class test_mole(unittest.TestCase):
         """
         print("\t\t", sys._getframe(0).f_code.co_name)
 
-        mp = MoleBoard.empty_board_state()
+        mp = MoleBoard.empty_board_state(self.mole_board.get_size())
         self.assertEqual(mp, self.mole_board.get_board_state())
 
         self.mole_board.raise_obj(0, 0, ObjectType.BASIC_MOLE)
@@ -58,12 +60,13 @@ class test_mole(unittest.TestCase):
 
         time.sleep(self.timer + 0.001)
         self.assertEqual(
-            MoleBoard.empty_board_state(), self.mole_board.get_board_state()
+            MoleBoard.empty_board_state(self.mole_board.get_size()),
+            self.mole_board.get_board_state(),
         )
 
     def test_raise_obj_2(self):
         print("\t\t", sys._getframe(0).f_code.co_name)
-        mp = MoleBoard.empty_board_state()
+        mp = MoleBoard.empty_board_state(self.mole_board.get_size())
         self.assertEqual(mp, self.mole_board.get_board_state())
 
         mole = self.mole_board.raise_obj(0, 0, ObjectType.BASIC_MOLE)
@@ -72,7 +75,8 @@ class test_mole(unittest.TestCase):
 
         result = mole.try_attack()
         self.assertEqual(
-            MoleBoard.empty_board_state(), self.mole_board.get_board_state()
+            MoleBoard.empty_board_state(self.mole_board.get_size()),
+            self.mole_board.get_board_state(),
         )
         self.assertEqual(ObjectType.BASIC_MOLE, result)
 

@@ -1,5 +1,5 @@
 from abc import *
-from typing import List
+from typing import List, Tuple
 from Common.ObjectType import *
 from Domain.Interfaces.IRaiseObj import IRaiseObj
 
@@ -26,5 +26,5 @@ class IBoard(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_size(self) -> int:
+    def get_size(self) -> Tuple[int, int]:
         pass

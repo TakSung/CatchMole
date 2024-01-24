@@ -8,7 +8,6 @@ from Domain.Entities.Cursor import Cursor
 from Application.GameManage import PlayerCursorControl
 
 from Common import PlayerState, ObjectType
-from Domain.Entities.Cursor import Cursor
 from Application.GameManage import PlayerActor, OneBoardGameManager
 from Application.StateFilter import BuffFilter, DebuffFilter
 
