@@ -155,11 +155,11 @@ class RoomUpdater(IMoleObserver):
 # 게임 변수 설정
 updater = RoomUpdater(room_manager)
 board = MoleBoard(mole_observers=[updater])
-debuff = DebuffFilter(4)
+debuff = DebuffFilter(3)
 manager = OneBoardGameManager(
     board=board,
     player_num=2,
-    buff_filter=debuff,
+    debuff_filter=debuff,
 )
 player1 = manager.player_list[0]
 player2 = manager.player_list[1]
@@ -220,7 +220,7 @@ while True:
             pg.quit()
             sys.exit()
         elif event.type == pg.KEYDOWN:  # 키 입력을 처리
-            move_cursor(event.key, player)
+            move_cursor(event.key, player1)
 
         for item in room_manager.get_changed_list():
             (y, x, type, cursor) = item
