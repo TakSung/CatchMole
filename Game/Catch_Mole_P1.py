@@ -2,6 +2,7 @@ import __init__
 from typing import List
 import pygame as pg
 import sys
+import threading
 import time
 from pygame.locals import *
 import random
@@ -183,40 +184,58 @@ def convert_score(type: ObjectType) -> int:
             return 0
 
 
-import threading
-import time
+end_event = threading.Event()
 
 
 def auto_raise():
-    try:
-        for _ in range(90):
-            time.sleep(1)
-            xr = random.randrange(0, 4)
-            yr = random.randrange(0, 4)
-            t = random.randrange(0, 1000)
-            ic("raise mole", xr, yr)
-            if t < 200:
-                board.raise_obj(yr, xr, type=ObjectType.BOMB)
-            elif t < 400:
-                board.raise_obj(yr, xr, type=ObjectType.HACKER)
-            elif t < 951:
-                board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
-            else:
-                board.raise_obj(yr, xr, type=ObjectType.GOLD_MOLE)
-    except:
-        pass
+    for _ in range(90):
+        if end_event.is_set():
+            break
+        time.sleep(1)
+        xr = random.randrange(0, 4)
+        yr = random.randrange(0, 4)
+        t = random.randrange(0, 1000)
+        ic("raise mole", xr, yr)
+        if t < 200:
+            board.raise_obj(yr, xr, type=ObjectType.BOMB)
+        elif t < 400:
+            board.raise_obj(yr, xr, type=ObjectType.HACKER)
+        elif t < 951:
+            board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
+        else:
+            board.raise_obj(yr, xr, type=ObjectType.GOLD_MOLE)
+
+
+timmer = 0
+
+
+def tic_timer():
+    global timmer
+    while True:
+        if end_event.is_set():
+            break
+        time.sleep(1)
+        timmer += 1
 
 
 game_screen.fill(WHITE)
 
+threading.Thread(target=tic_timer).start()
+threading.Thread(target=auto_raise).start()
+target_score = 50
 while True:
-    threading.Thread(target=auto_raise).start()
+    if score >= target_score:
+        break
 
     for _ in range(500):
+        if score >= target_score:
+            end_event.set()
+            break
         t = ObjectType.none
         event = pg.event.poll()  # 이벤트 처리
 
         if event.type == QUIT:
+            end_event.set()
             pg.quit()
             sys.exit()
         elif event.type == pg.KEYDOWN:  # 키 입력을 처리
@@ -226,12 +245,22 @@ while True:
             (y, x, type, cursor) = item
             print_room(y, x, type, cursor)
         updater.rend_effect()
-        text_surface = my_font.render(f"Score : {score}", False, (0, 0, 0))
+        text_surface = my_font.render(f"Time : {timmer}", False, (0, 0, 0))
         pg.draw.rect(game_screen, WHITE, [800, 0, 200, 800], 1000)
         game_screen.blit(text_surface, (810, 0))
+        text_surface = my_font.render(f"Score : {score}", False, (0, 0, 0))
+        pg.draw.rect(game_screen, WHITE, [800, 40, 200, 800], 1000)
+        game_screen.blit(text_surface, (810, 40))
         pg.display.update()
         room_manager.check_room()
         clock.tick(30)
+    threading.Thread(target=auto_raise).start()
 
-
+text_surface = my_font.render(
+    f"Congratulations! Success in {timmer} seconds", False, (0, 0, 0)
+)
+pg.draw.rect(game_screen, WHITE, [0, 500, 1000, 540], 40)
+game_screen.blit(text_surface, (210, 500))
+pg.display.update()
+time.sleep(5)
 pg.quit()
