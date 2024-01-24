@@ -68,7 +68,7 @@ def move_cursor(key, player):
         player.left()
     elif key == pg.K_RIGHT:
         player.right()
-    elif key == pg.K_k:
+    elif key == pg.K_SPACE:
         t = player.try_attack()
         # effect = effect_image.get_rect(
         #     left=BOARD_WIDTH / 4 * cursor_x + 20, top=HEIGHT / 4 * cursor_y + 20

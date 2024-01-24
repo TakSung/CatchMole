@@ -95,3 +95,38 @@ class RoomManager:
         for y in range(self.size):
             for x in range(self.size):
                 self.rooms[y][x].check_room()
+
+class RoomManagerP2:
+    def __init__(self, size: int = 3):
+        self.size = size
+        self.rooms = [[GUIRoom(y, x) for x in range(size)] for y in range(size)]
+        self.curser_x, self.curser_y = 0, 0
+
+    def set_curser(self, y: int, x: int):
+        self.rooms[self.curser_y][self.curser_x].set_curser(False)
+        self.curser_x, self.curser_y = x, y
+        self.rooms[y][x].set_curser(True)
+
+    def set_obj(self, y: int, x: int, type: ObjectType):
+        self.rooms[y][x].set_obj(type)
+
+    def get_changed_list(self) -> List[Tuple[int, int, ObjectType, bool]]:
+        """_summary_
+        룸에 있는 정보들을 튜플형태로 얻는다.
+        y,x위치, 룸의 존재하는 객체 종류, 커서의 존재여부
+
+        Returns:
+            List[Tuple[int, int, ObjectType, bool]]: _description_ y, x, object_type, is_cursor
+        """
+        changed_list = [
+            (self.rooms[y][x].get_room())
+            for y in range(self.size)
+            for x in range(self.size)
+            if self.rooms[y][x].is_change()
+        ]
+        return changed_list
+
+    def check_room(self):
+        for y in range(self.size):
+            for x in range(self.size):
+                self.rooms[y][x].check_room()
