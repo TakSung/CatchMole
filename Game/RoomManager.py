@@ -22,11 +22,11 @@ class GUIRoom:
     def __init__(self, y: int, x: int):
         self.y, self.x = y, x
         self.change = True
-        self.curser = False
+        self.cursor = False
         self.obj = ObjectType.none
 
     def set_curser(self, on: bool):
-        self.curser = on
+        self.cursor = on
         self.change = True
 
     def set_obj(self, obj: ObjectType):
@@ -58,19 +58,19 @@ class GUIRoom:
         Returns:
             Tuple[int, int, ObjectType, bool]: _description_ y, x, object_type, is_cursor
         """
-        return (self.y, self.x, self.obj, self.curser)
+        return (self.y, self.x, self.obj, self.cursor)
 
 
 class RoomManager:
     def __init__(self, size: int = 3):
         self.size = size
         self.rooms = [[GUIRoom(y, x) for x in range(size)] for y in range(size)]
-        self.curser_x, self.curser_y = 0, 0
-        self.set_curser(0, 0)
+        self.cursor_x, self.cursor_y = 0, 0
+        self.set_cursor(0, 0)
 
-    def set_curser(self, y: int, x: int):
-        self.rooms[self.curser_y][self.curser_x].set_curser(False)
-        self.curser_x, self.curser_y = x, y
+    def set_cursor(self, y: int, x: int):
+        self.rooms[self.cursor_y][self.cursor_x].set_curser(False)
+        self.cursor_x, self.cursor_y = x, y
         self.rooms[y][x].set_curser(True)
 
     def set_obj(self, y: int, x: int, type: ObjectType):
@@ -97,7 +97,9 @@ class RoomManager:
             for x in range(self.size):
                 self.rooms[y][x].check_room()
 
+
 #
+
 
 class RoomManagerP2:
     def __init__(self, size: int = 3):
@@ -107,7 +109,7 @@ class RoomManagerP2:
 
     def set_cursor(self, y: int, x: int):
         self.rooms[self.cursor_y][self.cursor_x].set_curser(False)
-        self.cursor_x, self.cursor_y = x,y
+        self.cursor_x, self.cursor_y = x, y
         self.rooms[y][x].set_curser(True)
 
     def set_obj(self, y: int, x: int, type: ObjectType):

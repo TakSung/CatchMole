@@ -75,7 +75,7 @@ def move_cursor(key, player):
             score += convert_score(t)
 
     (cursor_y, cursor_x) = player.get_cursor()
-    room_manager.set_curser(cursor_y, cursor_x)
+    room_manager.set_cursor(cursor_y, cursor_x)
 
 
 def print_room(y: int, x: int, type: ObjectType, is_cursor: bool):

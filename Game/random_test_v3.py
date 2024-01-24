@@ -67,7 +67,7 @@ def move_cursor(key):
         score += convert_score(t)
 
     (cursor_y, cursor_x) = player.get_cursor()
-    room_manager.set_curser(cursor_y, cursor_x)
+    room_manager.set_cursor(cursor_y, cursor_x)
 
 
 # 게임 변수 설정
