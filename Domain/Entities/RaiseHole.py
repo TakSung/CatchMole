@@ -54,8 +54,11 @@ class RaiseHole(IRaiseObj, IMoleSubject):
         import time
 
         def auto_lower():
-            time.sleep(self.get_time())
-            self.try_lower()
+            try:
+                time.sleep(self.get_time())
+                self.try_lower()
+            except:
+                pass
 
         threading.Thread(target=auto_lower).start()
 

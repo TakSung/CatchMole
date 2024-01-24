@@ -66,6 +66,7 @@ class RoomManager:
         self.size = size
         self.rooms = [[GUIRoom(y, x) for x in range(size)] for y in range(size)]
         self.curser_x, self.curser_y = 0, 0
+        self.set_curser(0, 0)
 
     def set_curser(self, y: int, x: int):
         self.rooms[self.curser_y][self.curser_x].set_curser(False)

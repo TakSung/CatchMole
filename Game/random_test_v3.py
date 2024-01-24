@@ -12,7 +12,7 @@ from Common import ObjectType, ObjectState
 
 from Domain.Entities.ObjFactory import *
 from Domain.Entities.MoleBoard import MoleBoard
-from Application.GameManage import PlayerActor
+from Application.GameManage import PlayerCursorControl
 from Game.RoomManager import RoomManager
 
 clock = pg.time.Clock()
@@ -71,7 +71,7 @@ def move_cursor(key):
 
 
 # 게임 변수 설정
-player = PlayerActor(3)
+player = PlayerCursorControl(3)
 cursor_x, cursor_y = 0, 0
 
 
