@@ -107,7 +107,7 @@ class RoomManagerP2:
         self.rooms = [[GUIRoom(y, x) for x in range(size)] for y in range(size)]
         self.cursor_x, self.cursor_y = 0, 0
 
-    def set_cursor(self, y: int, x: int):
+    def set_cursor(self, y: int, x: int, ):
         self.rooms[self.cursor_y][self.cursor_x].set_curser(False)
         self.cursor_x, self.cursor_y = x, y
         self.rooms[y][x].set_curser(True)
