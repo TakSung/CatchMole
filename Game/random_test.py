@@ -12,11 +12,19 @@ import random
 
 
 class BoardPrinter(IBoardObserver):
+    def __init__(self):
+        self.score = 0
+
+    def add_score(self):
+        self.score += 1
+
     def update_board(self, type: List[List[ObjectType]]) -> None:
         rows = len(type)
         cols = len(type[0])
         a = [str(i) for i in range(cols)]
 
+        print()
+        print("catch count :", self.score)
         print("  " + " ".join(a))
         print(" ", "=" * (2 * cols + 1), sep="")
         for i in range(rows):
@@ -43,12 +51,21 @@ while True:
     mole_board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
 
     ##사용자한테 좌표 xplayer yplayer 받기
-    try:
-        xp = int(input("input x:"))
-        yp = int(input("input y:"))
-    except ValueError as ve:
-        print("다시 입력해 주세요.")
-        continue
+    while True:
+        try:
+            xp = int(input("input x:"))
+            yp = int(input("input y:"))
+            t = mole_board.try_attack(yp, xp)
+            break
+        except ValueError as ve:
+            print("숫자를 입력해 주세요.")
+            print("다시 입력해 주세요.")
+            continue
+        except IndexError as ex:
+            print("입력 범위를 넘었습니다.")
+            print("다시 입력해 주세요.")
+            continue
 
-    t = mole_board.try_attack(yp, xp)
     print("catch :", t.name)
+    if t == ObjectType.BASIC_MOLE:
+        printer.add_score()

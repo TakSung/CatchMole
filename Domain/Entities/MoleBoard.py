@@ -34,7 +34,7 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject, IMoleSubject):
         mole_observers: Union[List[IMoleObserver], IMoleObserver] = [],
         factory: IObjFactory = ObjFactory(),
     ):
-        self.observers: List[IBoardObserver] = []
+        self.board_observers: List[IBoardObserver] = []
         match board_observers:
             case obsr if isinstance(obsr, IBoardObserver):
                 observers = [obsr]
@@ -70,12 +70,12 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject, IMoleSubject):
 
     def raise_obj(self, y: int, x: int, type: ObjectType) -> IRaiseObj:
         ret = self.board[y][x].set_raise_object_to_type(type)
-        self.notify_board()
+        # self.notify_board()
         return ret
 
     def set_obj(self, y: int, x: int, obj: IRaiseObj) -> IRaiseObj:
         ret = self.board[y][x].set_raise_object_to_raise_obj(obj)
-        self.notify_board()
+        # self.notify_board()
         return ret
 
     def try_attack(self, y: int, x: int) -> ObjectType:
@@ -103,12 +103,12 @@ class MoleBoard(IBoard, IMoleObserver, IBoardSubject, IMoleSubject):
         if observers is None:
             raise ValueError("MoleBoard in register_observers")
         for obsr in observers:
-            self.observers.append(obsr)
+            self.board_observers.append(obsr)
 
     def notify_board(self) -> None:
-        if self.observers is None:
+        if self.board_observers is None:
             return
-        for obsv in self.observers:
+        for obsv in self.board_observers:
             obsv.update_board(self.get_board_state())
 
     def get_size(self) -> int:
