@@ -222,7 +222,7 @@ game_screen.fill(WHITE)
 
 threading.Thread(target=tic_timer).start()
 threading.Thread(target=auto_raise).start()
-target_score = 50
+target_score = 150
 while True:
     if score >= target_score:
         break

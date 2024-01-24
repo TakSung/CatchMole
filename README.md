@@ -12,10 +12,11 @@ pip install -r requirements.txt
 # Play Game
 ### EXE
 ```python
-python Game/random_test_v4.py
+python Game/Catch_Mole_P1.py
 ```
 ### 게임방법 & 설명 
-- 방향키로 커서 이동 and K를 누러면 두더지를 잡을 수 있음
+- 방향키로 커서 이동 and 스페이스바를 누러면 두더지를 잡을 수 있음
+- 150점 이상 달성시 종료
 - 두더지 잡으면 +1점 획득
 - 해커를 누르면 방향키가 3초간 바뀜(버그 있음), 잡으면 5점
 - 황금두더지는 7번 때려야 잡힘. 20점 획득, 2초안에 못잡으면 빨간폭탄 나옴
@@ -27,7 +28,7 @@ python -m unittest Tests/Domain/Entities/test_board.py Tests/Domain/Entities/tes
 python Game/random_test.py
 python Game/random_test_v2.py
 python Game/random_test_v3.py
-python Game/random_test_v4.py
+python Game/Catch_Mole_P1.py
 ```
 
 # 이미지 라이센스
