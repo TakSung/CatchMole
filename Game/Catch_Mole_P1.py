@@ -214,7 +214,7 @@ def tic_timer():
     while True:
         if end_event.is_set():
             break
-        time.sleep(1)
+        time.sleep(0.1)
         timmer += 1
 
 
@@ -223,6 +223,7 @@ game_screen.fill(WHITE)
 threading.Thread(target=tic_timer).start()
 threading.Thread(target=auto_raise).start()
 target_score = 150
+ic.disable()
 while True:
     if score >= target_score:
         break
@@ -248,7 +249,7 @@ while True:
             (y, x, type, cursor) = item
             print_room(y, x, type, cursor)
         updater.rend_effect()
-        text_surface = my_font.render(f"Time : {timmer}", False, (0, 0, 0))
+        text_surface = my_font.render(f"Time : {timmer/10}", False, (0, 0, 0))
         pg.draw.rect(game_screen, WHITE, [800, 0, 200, 800], 1000)
         game_screen.blit(text_surface, (810, 0))
         text_surface = my_font.render(f"Score : {score}", False, (0, 0, 0))
@@ -259,7 +260,7 @@ while True:
     threading.Thread(target=auto_raise).start()
 
 text_surface = my_font.render(
-    f"Congratulations! Success in {timmer} seconds", False, (0, 0, 0)
+    f"Congratulations! Success in {timmer/10} seconds", False, (0, 0, 0)
 )
 pg.draw.rect(game_screen, WHITE, [0, 500, 1000, 540], 40)
 game_screen.blit(text_surface, (210, 500))
