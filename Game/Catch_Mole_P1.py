@@ -75,10 +75,10 @@ def move_cursor(key, player):
             score += convert_score(t)
 
     (cursor_y, cursor_x) = player.get_cursor()
-    room_manager.set_cursor(cursor_y, cursor_x)
+    room_manager.set_cursors(cursor_y, cursor_x)
 
 
-def print_room(y: int, x: int, type: ObjectType, is_cursor: bool):
+def print_room(y: int, x: int, type: ObjectType, is_cursor: List[bool]):
     rect_width, rect_height = 195, 195
     X = BOARD_WIDTH / 4 * x
     Y = HEIGHT / 4 * y
