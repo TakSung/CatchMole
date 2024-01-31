@@ -19,10 +19,16 @@ class GUIRoom:
     5. 이펙트 관리(차후 진행)
     """
 
-    def __init__(self, y: int, x: int):
+    def __init__(self, y: int, x: int, player_num: int = 1):
         self.y, self.x = y, x
         self.change = True
-        self.cursor = False
+        self.cursors = [False for _ in range(player_num)]
+        self.cursors = []
+        for _ in range(player_num):
+            self.cursors.append(False)
+        for i in range(player_num):
+            print(i, self.cursors[i])
+
         self.obj = ObjectType.none
 
     def set_curser(self, on: bool):
@@ -107,7 +113,11 @@ class RoomManagerP2:
         self.rooms = [[GUIRoom(y, x) for x in range(size)] for y in range(size)]
         self.cursor_x, self.cursor_y = 0, 0
 
-    def set_cursor(self, y: int, x: int, ):
+    def set_cursor(
+        self,
+        y: int,
+        x: int,
+    ):
         self.rooms[self.cursor_y][self.cursor_x].set_curser(False)
         self.cursor_x, self.cursor_y = x, y
         self.rooms[y][x].set_curser(True)
