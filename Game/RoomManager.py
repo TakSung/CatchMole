@@ -25,7 +25,7 @@ class GUIRoom:
         self.cursors = [False for _ in range(player_num)]
         self.obj = ObjectType.none
 
-    def set_cursors(self, on: bool, idx:int = 0):
+    def set_cursor(self, on: bool, idx:int = 0):
         self.cursors[idx] = on
         self.change = True
 
@@ -66,17 +66,17 @@ class RoomManager:
         self.size = size
         self.rooms = [[GUIRoom(y, x) for x in range(size)] for y in range(size)]
         self.cursor_x, self.cursor_y = 0, 0
-        self.set_cursors(0, 0)
+        self.set_cursor(0, 0)
 
-    def set_cursors(self, y: int, x: int, idx:int = 0):
-        self.rooms[self.cursor_y][self.cursor_x].set_cursors(False)
+    def set_cursor(self, y: int, x: int, idx:int = 0):
+        self.rooms[self.cursor_y][self.cursor_x].set_cursor(False)
         self.cursor_x, self.cursor_y = x, y
-        self.rooms[y][x].set_cursors(True)
+        self.rooms[y][x].set_cursor(True)
 
     def set_obj(self, y: int, x: int, type: ObjectType):
         self.rooms[y][x].set_obj(type)
 
-    def get_changed_list(self) -> List[Tuple[int, int, ObjectType, bool]]:
+    def get_changed_list(self) -> List[Tuple[int, int, ObjectType, List[bool]]]:
         """_summary_
         룸에 있는 정보들을 튜플형태로 얻는다.
         y,x위치, 룸의 존재하는 객체 종류, 커서의 존재여부
@@ -104,18 +104,24 @@ class RoomManager:
 class RoomManagerP2:
     def __init__(self, size: int = 3):
         self.size = size
-        self.rooms = [[GUIRoom(y, x) for x in range(size)] for y in range(size)]
-        self.cursor_x, self.cursor_y = 0, 0
+        self.rooms = [[GUIRoom(y, x, 2) for x in range(size)] for y in range(size)]
+        self.cursor_x1, self.cursor_y1 = 0, 0
+        self.cursor_x2, self.cursor_y2 = 0, 0
 
     def set_cursor(
         self,
         y: int,
         x: int,
-        idx:int = 0
+        idx:int
     ):
-        self.rooms[self.cursor_y][self.cursor_x].set_cursor[idx](False)
-        self.cursor_x, self.cursor_y = x, y
-        self.rooms[y][x].set_curso[idx](True)
+        if idx == 0:
+            self.rooms[self.cursor_y1][self.cursor_x1].set_cursor(False,idx)
+            self.cursor_x1, self.cursor_y1 = x, y
+            self.rooms[y][x].set_cursor(True,idx)
+        if idx == 1:
+            self.rooms[self.cursor_y2][self.cursor_x2].set_cursor(False,idx)
+            self.cursor_x2, self.cursor_y2 = x, y
+            self.rooms[y][x].set_cursor(True,idx)
 
     def set_obj(self, y: int, x: int, type: ObjectType):
         self.rooms[y][x].set_obj(type)

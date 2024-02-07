@@ -2,6 +2,7 @@ import __init__
 from typing import List
 import pygame as pg
 import sys
+import threading
 import time
 from pygame.locals import *
 import random
@@ -15,7 +16,7 @@ from Domain.Entities.MoleBoard import MoleBoard
 from Application.GameManage import PlayerCursorControl, OneBoardGameManager
 from Application.StateFilter import DebuffFilter, ObjectPlayerLinker
 
-from Game.RoomManager import RoomManager
+from Game.RoomManager import RoomManagerP2
 
 clock = pg.time.Clock()
 
@@ -28,7 +29,8 @@ outline_thickness = 5
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-cursor_color = (0, 0, 255)
+cursor_color1 = (0, 0, 255)
+cursor_color2 = (0, 255, 0)
 
 line_color = (0, 0, 0)
 
@@ -49,38 +51,56 @@ fps = 30
 
 game_screen = pg.display.set_mode((ALL_W, HEIGHT))
 satus_screen = pg.display.set_mode((ALL_W, STATUS))
-room_manager = RoomManager(4)
+room_manager = RoomManagerP2(4)
 
 
 pg.display.set_caption("Test")
 
 
-def move_cursor(key, player):
+def move_cursor1(key, player):
     global cursor_x, cursor_y
-    global score
+    global score1
 
     (cursor_y, cursor_x) = player.get_cursor()
-    if key == pg.K_UP:
-        player.down()
-    elif key == pg.K_DOWN:
-        player.up()
-    elif key == pg.K_LEFT:
-        player.left()
-    elif key == pg.K_RIGHT:
-        player.right()
-    elif key == pg.K_SPACE:
-        t = player.try_attack()
-        # effect = effect_image.get_rect(
-        #     left=BOARD_WIDTH / 4 * cursor_x + 20, top=HEIGHT / 4 * cursor_y + 20
-        # )
-        # game_screen.blit(effect_image, effect)
-        score += convert_score(t)
+    match key:
+        case pg.K_KP8:
+            player.down()
+        case pg.K_KP5:
+            player.up()
+        case pg.K_KP4:
+            player.left()
+        case pg.K_KP6:
+            player.right()
+        case pg.K_RSHIFT:
+            t = player.try_attack()
+            score1 += convert_score(t)
 
     (cursor_y, cursor_x) = player.get_cursor()
-    room_manager.set_cursor(cursor_y, cursor_x)
+    room_manager.set_cursor(cursor_y, cursor_x,0)
+    
+def move_cursor2(key, player):
+    global cursor_x, cursor_y
+    global score2
+
+    (cursor_y, cursor_x) = player.get_cursor()
+    match key:
+        case pg.K_w:
+            player.down()
+        case pg.K_s:
+            player.up()
+        case pg.K_a:
+            player.left()
+        case pg.K_d:
+            player.right()
+        case pg.K_SPACE:
+            t = player.try_attack()
+            score2 += convert_score(t)
+
+    (cursor_y, cursor_x) = player.get_cursor()
+    room_manager.set_cursor(cursor_y, cursor_x,1)
 
 
-def print_room(y: int, x: int, type: ObjectType, is_cursor: bool):
+def print_room(y: int, x: int, type: ObjectType, cursors: List[bool]):
     rect_width, rect_height = 195, 195
     X = BOARD_WIDTH / 4 * x
     Y = HEIGHT / 4 * y
@@ -95,11 +115,19 @@ def print_room(y: int, x: int, type: ObjectType, is_cursor: bool):
         ),
     )
     pg.draw.rect(game_screen, WHITE, [X, Y, 195, 195], 1000)
+    
+    ic()
+    print(cursors)
+    ic(cursors)
 
-    if is_cursor == True:
+    if cursors[0] == True:
         cursor_pos_x = x * CELL_SIZE + CELL_SIZE // 2
         cursor_pos_y = y * CELL_SIZE + CELL_SIZE // 2
-        pg.draw.circle(game_screen, cursor_color, (cursor_pos_x, cursor_pos_y), 50)
+        pg.draw.circle(game_screen, cursor_color1, (cursor_pos_x, cursor_pos_y), 50)
+    if cursors[1] == True:
+        cursor_pos_x = x * CELL_SIZE + CELL_SIZE // 2
+        cursor_pos_y = y * CELL_SIZE + CELL_SIZE // 2
+        pg.draw.circle(game_screen, cursor_color2, (cursor_pos_x, cursor_pos_y), 50)
     match type:
         case ObjectType.BASIC_MOLE:
             mole = mole_image.get_rect(
@@ -129,7 +157,7 @@ def print_room(y: int, x: int, type: ObjectType, is_cursor: bool):
 
 
 class RoomUpdater(IMoleObserver):
-    def __init__(self, room_manager: RoomManager):
+    def __init__(self, room_manager: RoomManagerP2):
         self.room_manager = room_manager
         self.render_effect_image = None
 
@@ -167,7 +195,8 @@ player2 = manager.player_list[1]
 pg.font.init()  # you have to call this at the start,
 # if you want to use this module.
 my_font = pg.font.SysFont("Comic Sans MS", 30)
-score = 0
+score1 = 0
+score2 = 0
 
 
 def convert_score(type: ObjectType) -> int:
@@ -177,21 +206,20 @@ def convert_score(type: ObjectType) -> int:
         case ObjectType.BOMB:
             return -3
         case ObjectType.GOLD_MOLE:
-            return 20
+            return 100
         case ObjectType.RED_BOMB:
             return -10
-        case ObjectType.HACKER:
-            return 5
         case _:
             return 0
 
 
-import threading
-import time
+end_event = threading.Event()
 
 
 def auto_raise():
     for _ in range(90):
+        if end_event.is_set():
+            break
         time.sleep(1)
         xr = random.randrange(0, 4)
         yr = random.randrange(0, 4)
@@ -199,7 +227,7 @@ def auto_raise():
         ic("raise mole", xr, yr)
         if t < 200:
             board.raise_obj(yr, xr, type=ObjectType.BOMB)
-        elif t < 400:
+        elif t < 280:
             board.raise_obj(yr, xr, type=ObjectType.HACKER)
         elif t < 951:
             board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
@@ -207,31 +235,72 @@ def auto_raise():
             board.raise_obj(yr, xr, type=ObjectType.GOLD_MOLE)
 
 
+timer = 0
+
+
+def tic_timer():
+    global timer
+    while True:
+        if end_event.is_set():
+            break
+        time.sleep(0.1)
+        timer += 1
+
+
 game_screen.fill(WHITE)
 
+threading.Thread(target=tic_timer).start()
+threading.Thread(target=auto_raise).start()
+target_score = 150
+ic.disable()
 while True:
-    threading.Thread(target=auto_raise).start()
+    if score1 >= target_score:
+        break
+    elif score2 >= target_score:
+        break
 
     for _ in range(500):
+        if score1 >= target_score:
+            end_event.set()
+            break
+        elif score2 >= target_score:
+            end_event.set()
+            break
         t = ObjectType.none
         event = pg.event.poll()  # 이벤트 처리
 
         if event.type == QUIT:
+            end_event.set()
             pg.quit()
             sys.exit()
         elif event.type == pg.KEYDOWN:  # 키 입력을 처리
-            move_cursor(event.key, player1)
+            move_cursor1(event.key, player1)
+            move_cursor2(event.key, player2)
 
-        for item in room_manager.get_changed_list():
+        chaged_rooms = room_manager.get_changed_list()
+        room_manager.check_room()
+
+        for item in chaged_rooms:
             (y, x, type, cursor) = item
             print_room(y, x, type, cursor)
         updater.rend_effect()
-        text_surface = my_font.render(f"Score : {score}", False, (0, 0, 0))
+        text_surface = my_font.render(f"Time : {timer/10}", False, (0, 0, 0))
         pg.draw.rect(game_screen, WHITE, [800, 0, 200, 800], 1000)
         game_screen.blit(text_surface, (810, 0))
+        text_surface = my_font.render(f"Score : {score1}", False, (0, 0, 0))
+        pg.draw.rect(game_screen, WHITE, [800, 40, 200, 800], 1000)
+        game_screen.blit(text_surface, (810, 40))
+        text_surface = my_font.render(f"Score : {score2}", False, (0, 0, 0))
+        game_screen.blit(text_surface, (810, 80))
         pg.display.update()
-        room_manager.check_room()
         clock.tick(30)
+    threading.Thread(target=auto_raise).start()
 
-
+text_surface = my_font.render(
+    f"Congratulations! Success in {timmer/10} seconds", False, (0, 0, 0)
+)
+pg.draw.rect(game_screen, WHITE, [0, 500, 1000, 540], 40)
+game_screen.blit(text_surface, (210, 500))
+pg.display.update()
+time.sleep(5)
 pg.quit()

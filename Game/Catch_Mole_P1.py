@@ -75,10 +75,10 @@ def move_cursor(key, player):
             score += convert_score(t)
 
     (cursor_y, cursor_x) = player.get_cursor()
-    room_manager.set_cursors(cursor_y, cursor_x)
+    room_manager.set_cursor(cursor_y, cursor_x)
 
 
-def print_room(y: int, x: int, type: ObjectType, is_cursor: List[bool]):
+def print_room(y: int, x: int, type: ObjectType, cursors: List[bool]):
     rect_width, rect_height = 195, 195
     X = BOARD_WIDTH / 4 * x
     Y = HEIGHT / 4 * y
@@ -94,7 +94,7 @@ def print_room(y: int, x: int, type: ObjectType, is_cursor: List[bool]):
     )
     pg.draw.rect(game_screen, WHITE, [X, Y, 195, 195], 1000)
 
-    if is_cursor == True:
+    if cursors[0] == True:
         cursor_pos_x = x * CELL_SIZE + CELL_SIZE // 2
         cursor_pos_y = y * CELL_SIZE + CELL_SIZE // 2
         pg.draw.circle(game_screen, cursor_color, (cursor_pos_x, cursor_pos_y), 50)
