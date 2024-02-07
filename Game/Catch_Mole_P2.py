@@ -1,7 +1,8 @@
 import __init__
-from typing import List
+from typing import List, Dict, Tuple
 import pygame as pg
 import sys
+import threading
 import time
 from pygame.locals import *
 import random
@@ -12,7 +13,7 @@ from Common import ObjectType, ObjectState
 
 from Domain.Entities.ObjFactory import *
 from Domain.Entities.MoleBoard import MoleBoard
-from Application.GameManage import PlayerCursorControl, OneBoardGameManager
+from Application.GameManage import PlayerActor, PlayerCursorControl, OneBoardGameManager
 from Application.StateFilter import DebuffFilter, ObjectPlayerLinker
 
 from Game.RoomManager import RoomManager
@@ -31,6 +32,7 @@ BLACK = (0, 0, 0)
 cursor_color = (0, 0, 255)
 
 line_color = (0, 0, 0)
+
 
 mole_image = pg.image.load("mole.png")
 gold_mole_image = pg.image.load("gold_mole.png")
@@ -55,32 +57,47 @@ room_manager = RoomManager(4)
 pg.display.set_caption("Test")
 
 
-def move_cursor(key, player):
-    global cursor_x, cursor_y
+def move_cursor(key, player1: PlayerActor, player2: PlayerActor):
     global score
 
-    (cursor_y, cursor_x) = player.get_cursor()
-    if key == pg.K_UP:
-        player.down()
-    elif key == pg.K_DOWN:
-        player.up()
-    elif key == pg.K_LEFT:
-        player.left()
-    elif key == pg.K_RIGHT:
-        player.right()
-    elif key == pg.K_SPACE:
-        t = player.try_attack()
-        # effect = effect_image.get_rect(
-        #     left=BOARD_WIDTH / 4 * cursor_x + 20, top=HEIGHT / 4 * cursor_y + 20
-        # )
-        # game_screen.blit(effect_image, effect)
-        score += convert_score(t)
+    keycode_list: List[Dict[str, int]] = [
+        {
+            "up": pg.K_UP,
+            "down": pg.K_DOWN,
+            "left": pg.K_LEFT,
+            "right": pg.K_RIGHT,
+            "attack": pg.K_KP_0,
+        },
+        {
+            "up": pg.K_w,
+            "down": pg.K_s,
+            "left": pg.K_a,
+            "right": pg.K_d,
+            "attack": pg.K_c,
+        },
+    ]
 
-    (cursor_y, cursor_x) = player.get_cursor()
-    room_manager.set_cursor(cursor_y, cursor_x)
+    for i, keycode in enumerate(keycode_list):
+        player = player1 if i == 0 else player2
+
+        match key:
+            case pg.K_UP | pg.K_KP8:
+                player.down()
+            case pg.K_DOWN | pg.K_KP5:
+                player.up()
+            case pg.K_LEFT | pg.K_KP4:
+                player.left()
+            case pg.K_RIGHT | pg.K_KP6:
+                player.right()
+            case pg.K_k | pg.K_SPACE | pg.K_TAB:
+                t = player.try_attack()
+                score[i] += convert_score(t)
+
+        (cursor_y, cursor_x) = player.get_cursor()
+        room_manager.set_cursor(cursor_y, cursor_x)
 
 
-def print_room(y: int, x: int, type: ObjectType, is_cursor: bool):
+def print_room(y: int, x: int, type: ObjectType, cursors: List[bool]):
     rect_width, rect_height = 195, 195
     X = BOARD_WIDTH / 4 * x
     Y = HEIGHT / 4 * y
@@ -96,10 +113,15 @@ def print_room(y: int, x: int, type: ObjectType, is_cursor: bool):
     )
     pg.draw.rect(game_screen, WHITE, [X, Y, 195, 195], 1000)
 
-    if is_cursor == True:
-        cursor_pos_x = x * CELL_SIZE + CELL_SIZE // 2
-        cursor_pos_y = y * CELL_SIZE + CELL_SIZE // 2
-        pg.draw.circle(game_screen, cursor_color, (cursor_pos_x, cursor_pos_y), 50)
+    radius = 30
+    for i, cursor in enumerate(cursors):
+        if cursor == True:
+            cursor_pos_x = x * CELL_SIZE + CELL_SIZE // 4 + i * (CELL_SIZE // 2)
+            cursor_pos_y = y * CELL_SIZE + CELL_SIZE // 4 + i * (CELL_SIZE // 2)
+            pg.draw.circle(
+                game_screen, cursor_color, (cursor_pos_x, cursor_pos_y), radius
+            )
+
     match type:
         case ObjectType.BASIC_MOLE:
             mole = mole_image.get_rect(
@@ -167,7 +189,7 @@ player2 = manager.player_list[1]
 pg.font.init()  # you have to call this at the start,
 # if you want to use this module.
 my_font = pg.font.SysFont("Comic Sans MS", 30)
-score = 0
+score: Tuple[int, int] = (0, 0)
 
 
 def convert_score(type: ObjectType) -> int:
@@ -220,11 +242,11 @@ while True:
             pg.quit()
             sys.exit()
         elif event.type == pg.KEYDOWN:  # 키 입력을 처리
-            move_cursor(event.key, player1)
+            move_cursor(event.key, player1, player1)
 
         for item in room_manager.get_changed_list():
-            (y, x, type, cursor) = item
-            print_room(y, x, type, cursor)
+            (y, x, type, cursors) = item
+            print_room(y, x, type, cursors)
         updater.rend_effect()
         text_surface = my_font.render(f"Score : {score}", False, (0, 0, 0))
         pg.draw.rect(game_screen, WHITE, [800, 0, 200, 800], 1000)

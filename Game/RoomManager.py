@@ -83,7 +83,7 @@ class RoomManager:
         y,x위치, 룸의 존재하는 객체 종류, 커서의 존재여부
 
         Returns:
-            List[Tuple[int, int, ObjectType, bool]]: _description_ y, x, object_type, is_cursor
+            List[Tuple[int, int, ObjectType, List[bool]]]: _description_ y, x, object_type, cursors
         """
         changed_list = [
             (self.rooms[y][x].get_room())
@@ -99,23 +99,27 @@ class RoomManager:
                 self.rooms[y][x].check_room()
 
 
-#
-
-
 class RoomManagerP2:
-    def __init__(self, size: int = 3):
-        self.size = size
-        self.rooms = [[GUIRoom(y, x) for x in range(size)] for y in range(size)]
-        self.cursor_x, self.cursor_y = 0, 0
+    """
+    self.cursors:List[Tuple[int,int]]
+       (y,x), (y,x) .....
+    """
 
-    def set_cursor(
-        self,
-        y: int,
-        x: int,
-    ):
-        self.rooms[self.cursor_y][self.cursor_x].set_cursor(False)
-        self.cursor_x, self.cursor_y = x, y
-        self.rooms[y][x].set_cursor(True)
+    def __init__(self, room_size: int = 3, player_num: int = 2):
+        self.room_size = room_size
+        self.num = player_num
+        self.rooms = [
+            [GUIRoom(y, x, player_num) for x in range(room_size)]
+            for y in range(room_size)
+        ]
+        self.cursors: List[Tuple[int, int]] = [(0, 0), (room_size - 1, room_size - 1)]
+
+    def set_cursor(self, y: int, x: int, idx: int):
+        assert 0 <= idx < self.room_size
+        (o_y, o_x) = self.cursors[idx]
+        self.rooms[o_y][o_x].set_cursor(False, idx)
+        self.cursors[idx] = (y, x)
+        self.rooms[y][x].set_cursor(True, idx)
 
     def set_obj(self, y: int, x: int, type: ObjectType):
         self.rooms[y][x].set_obj(type)
@@ -130,13 +134,13 @@ class RoomManagerP2:
         """
         changed_list = [
             (self.rooms[y][x].get_room())
-            for y in range(self.size)
-            for x in range(self.size)
+            for y in range(self.room_size)
+            for x in range(self.room_size)
             if self.rooms[y][x].is_change()
         ]
         return changed_list
 
     def check_room(self):
-        for y in range(self.size):
-            for x in range(self.size):
+        for y in range(self.room_size):
+            for x in range(self.room_size):
                 self.rooms[y][x].check_room()
