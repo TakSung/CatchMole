@@ -78,7 +78,7 @@ def move_cursor(key, player):
     room_manager.set_cursor(cursor_y, cursor_x)
 
 
-def print_room(y: int, x: int, type: ObjectType, is_cursor: bool):
+def print_room(y: int, x: int, type: ObjectType, cursors: List[bool]):
     rect_width, rect_height = 195, 195
     X = BOARD_WIDTH / 4 * x
     Y = HEIGHT / 4 * y
@@ -94,7 +94,7 @@ def print_room(y: int, x: int, type: ObjectType, is_cursor: bool):
     )
     pg.draw.rect(game_screen, WHITE, [X, Y, 195, 195], 1000)
 
-    if is_cursor == True:
+    if cursors[0] == True:
         cursor_pos_x = x * CELL_SIZE + CELL_SIZE // 2
         cursor_pos_y = y * CELL_SIZE + CELL_SIZE // 2
         pg.draw.circle(game_screen, cursor_color, (cursor_pos_x, cursor_pos_y), 50)
@@ -246,8 +246,8 @@ while True:
         room_manager.check_room()
 
         for item in chaged_rooms:
-            (y, x, type, cursor) = item
-            print_room(y, x, type, cursor)
+            (y, x, type, cursors) = item
+            print_room(y, x, type, cursors)
         updater.rend_effect()
         text_surface = my_font.render(f"Time : {timmer/10}", False, (0, 0, 0))
         pg.draw.rect(game_screen, WHITE, [800, 0, 200, 800], 1000)
