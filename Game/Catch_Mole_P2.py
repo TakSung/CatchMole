@@ -202,13 +202,13 @@ score2 = 0
 def convert_score(type: ObjectType) -> int:
     match type:
         case ObjectType.BASIC_MOLE:
-            return 1
+            return 3
         case ObjectType.BOMB:
             return -3
         case ObjectType.GOLD_MOLE:
-            return 100
+            return 60
         case ObjectType.RED_BOMB:
-            return -10
+            return -20
         case _:
             return 0
 
@@ -225,14 +225,17 @@ def auto_raise():
         yr = random.randrange(0, 4)
         t = random.randrange(0, 1000)
         ic("raise mole", xr, yr)
-        if t < 200:
-            board.raise_obj(yr, xr, type=ObjectType.BOMB)
-        elif t < 280:
-            board.raise_obj(yr, xr, type=ObjectType.HACKER)
-        elif t < 951:
-            board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
-        else:
-            board.raise_obj(yr, xr, type=ObjectType.GOLD_MOLE)
+        try:
+            if t < 200:
+                board.raise_obj(yr, xr, type=ObjectType.BOMB)
+            elif t < 280:
+                board.raise_obj(yr, xr, type=ObjectType.HACKER)
+            elif t < 951:
+                board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
+            else:
+                board.raise_obj(yr, xr, type=ObjectType.GOLD_MOLE)
+        except:
+            pass
 
 
 timer = 0
@@ -297,7 +300,7 @@ while True:
     threading.Thread(target=auto_raise).start()
 
 text_surface = my_font.render(
-    f"Congratulations! Success in {timmer/10} seconds", False, (0, 0, 0)
+    f"Congratulations! Success in {timer/10} seconds", False, (0, 0, 0)
 )
 pg.draw.rect(game_screen, WHITE, [0, 500, 1000, 540], 40)
 game_screen.blit(text_surface, (210, 500))
