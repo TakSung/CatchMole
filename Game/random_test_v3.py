@@ -38,7 +38,7 @@ fps = 30
 
 game_screen = pg.display.set_mode((WIDTH, HEIGHT))
 satus_screen = pg.display.set_mode((WIDTH, STATUS))
-room_manager = RoomManager(3)
+room_manager = RoomManager((3, 3))
 
 
 pg.display.set_caption("Test")
@@ -71,7 +71,7 @@ def move_cursor(key):
 
 
 # 게임 변수 설정
-player = PlayerCursorControl(3)
+player = PlayerCursorControl((3, 3))
 cursor_x, cursor_y = 0, 0
 
 
@@ -160,7 +160,7 @@ while True:
 
         for item in room_manager.get_changed_list():
             (y, x, type, cursor) = item
-            print_room(y, x, type, cursor)
+            print_room(y, x, type, cursor[0])
         text_surface = my_font.render(f"Score : {score}", False, (0, 0, 0))
         pg.draw.rect(game_screen, WHITE, [0, 600, 600, 200], 1000)
         game_screen.blit(text_surface, (0, 610))

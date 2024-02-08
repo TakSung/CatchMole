@@ -26,7 +26,7 @@ class GUIRoom:
         self.obj = ObjectType.none
 
     def set_cursor(self, on: bool, idx: int = 0):
-        assert idx >= 0 and idx < len(self.cursors)
+        assert 0 <= idx < len(self.cursors)
         self.cursors[idx] = on
         self.change = True
 
@@ -63,16 +63,25 @@ class GUIRoom:
 
 
 class RoomManager:
-    def __init__(self, size: int = 3):
+    def __init__(self, size: Tuple[int, int] = (3, 3), player_num=1):
         self.size = size
-        self.rooms = [[GUIRoom(y, x) for x in range(size)] for y in range(size)]
-        self.cursor_x, self.cursor_y = 0, 0
-        self.set_cursor(0, 0)
+        self.rooms = [
+            [GUIRoom(y, x, player_num) for x in range(size[1])] for y in range(size[0])
+        ]
+        self.cursors: List[Tuple[int, int]] = [
+            (i // size[1], i % size[1]) for i in range(player_num)
+        ]
+        for i, cursor in enumerate(self.cursors):
+            self.set_cursor(*cursor, idx=i)
 
-    def set_cursor(self, y: int, x: int):
-        self.rooms[self.cursor_y][self.cursor_x].set_cursor(False)
-        self.cursor_x, self.cursor_y = x, y
-        self.rooms[y][x].set_cursor(True)
+    def set_cursor(self, y: int, x: int, idx=0):
+        assert 0 <= idx < len(self.cursors)
+        assert 0 <= y < self.size[0]
+        assert 0 <= x < self.size[1]
+        (o_y, o_x) = self.cursors[idx]
+        self.rooms[o_y][o_x].set_cursor(False, idx)
+        self.cursors[idx] = (y, x)
+        self.rooms[y][x].set_cursor(True, idx)
 
     def set_obj(self, y: int, x: int, type: ObjectType):
         self.rooms[y][x].set_obj(type)
@@ -87,15 +96,15 @@ class RoomManager:
         """
         changed_list = [
             (self.rooms[y][x].get_room())
-            for y in range(self.size)
-            for x in range(self.size)
+            for y in range(self.size[0])
+            for x in range(self.size[1])
             if self.rooms[y][x].is_change()
         ]
         return changed_list
 
     def check_room(self):
-        for y in range(self.size):
-            for x in range(self.size):
+        for y in range(self.size[0]):
+            for x in range(self.size[1]):
                 self.rooms[y][x].check_room()
 
 
