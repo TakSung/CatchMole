@@ -72,7 +72,7 @@ keycode_tuple: Tuple[KeyMatchDict, KeyMatchDict] = (
         down=pg.K_KP5,
         left=pg.K_KP4,
         right=pg.K_KP6,
-        attack=pg.K_RSHIFT,
+        attack=pg.K_RETURN,
     ),
     KeyMatchDict(
         up=pg.K_w,

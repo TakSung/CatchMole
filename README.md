@@ -34,13 +34,13 @@ python Game/Catch_Mole_P2.py
 - 150점 이상 달성시 종료
 
 ### 방향키
-| 행동   | P1    | P2       |
-| ------ | ----- | -------- |
-| UP     | W     | NUMPAD_8 |
-| DOWN   | S     | NUMPAD_5 |
-| LEFT   | A     | NUMPAD_4 |
-| RIGHT  | D     | NUMPAD_6 |
-| ATTACK | SPACE | RSHIFT   |
+| 행동   | P1    | P2            |
+| ------ | ----- | ------------- |
+| UP     | W     | NUMPAD_8      |
+| DOWN   | S     | NUMPAD_5      |
+| LEFT   | A     | NUMPAD_4      |
+| RIGHT  | D     | NUMPAD_6      |
+| ATTACK | SPACE | ENTER(RETURN) |
 ### 유닛 설명
 - 두더지 잡으면 +5점 획득
 - 해커를 잡으면 상대방의 방향키가 4초간 바뀜(버그 있음)
