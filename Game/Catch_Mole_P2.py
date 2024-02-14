@@ -121,13 +121,13 @@ def print_room(y: int, x: int, type: ObjectType, cursors: List[bool]):
     ic(cursors)
 
     if cursors[0] == True:
-        cursor_pos_x = x * CELL_SIZE + CELL_SIZE // 2
+        cursor_pos_x = x * CELL_SIZE + CELL_SIZE // 2 + 40
         cursor_pos_y = y * CELL_SIZE + CELL_SIZE // 2
-        pg.draw.circle(game_screen, cursor_color1, (cursor_pos_x, cursor_pos_y), 50)
+        pg.draw.circle(game_screen, cursor_color1, (cursor_pos_x, cursor_pos_y), 28)
     if cursors[1] == True:
-        cursor_pos_x = x * CELL_SIZE + CELL_SIZE // 2
+        cursor_pos_x = x * CELL_SIZE + CELL_SIZE // 2 - 40
         cursor_pos_y = y * CELL_SIZE + CELL_SIZE // 2
-        pg.draw.circle(game_screen, cursor_color2, (cursor_pos_x, cursor_pos_y), 50)
+        pg.draw.circle(game_screen, cursor_color2, (cursor_pos_x, cursor_pos_y), 28)
     match type:
         case ObjectType.BASIC_MOLE:
             mole = mole_image.get_rect(
