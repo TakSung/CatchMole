@@ -9,18 +9,43 @@ cd CatchMole
 pip install -r requirements.txt
 ```
 
-# Play Game
+# Play P1 Game
 ### EXE
 ```python
 python Game/Catch_Mole_P1.py
 ```
-### 게임방법 & 설명 
-- 방향키로 커서 이동 and 스페이스바로 두더지를 잡을 수 있음
+### 목표
 - 150점 이상 달성시 종료
+### 방향키
+- 방향키로 커서 이동
+- 스페이스바로 두더지를 잡을 수 있음
+### 유닛 설명
 - 두더지 잡으면 +1점 획득
-- 해커를 누르면 방향키가 3초간 바뀜(버그 있음), 잡으면 5점
+- 해커를 누르면 방향키가 4초간 바뀜(버그 있음), 잡으면 5점
 - 황금두더지는 7번 때려야 잡힘. 20점 획득, 2초안에 못잡으면 빨간폭탄 나옴
 - 폭탄은 -3점, 빨간폭탄은 -10점 감점
+
+# Play P2 Game
+### EXE
+```python
+python Game/Catch_Mole_P2.py
+```
+### 목표
+- 150점 이상 달성시 종료
+
+### 방향키
+| 행동   | P1    | P2            |
+| ------ | ----- | ------------- |
+| UP     | W     | NUMPAD_8      |
+| DOWN   | S     | NUMPAD_5      |
+| LEFT   | A     | NUMPAD_4      |
+| RIGHT  | D     | NUMPAD_6      |
+| ATTACK | SPACE | ENTER(RETURN) |
+### 유닛 설명
+- 두더지 잡으면 +5점 획득
+- 해커를 잡으면 상대방의 방향키가 4초간 바뀜(버그 있음)
+- 황금두더지는 7번 때려야 잡힘. 60점 획득, 2초안에 못잡으면 빨간폭탄 나옴
+- 폭탄은 -3점, 빨간폭탄은 -20점 감점
 
 # Test
 ```bash
@@ -29,6 +54,7 @@ python Game/random_test.py
 python Game/random_test_v2.py
 python Game/random_test_v3.py
 python Game/Catch_Mole_P1.py
+python Game/Catch_Mole_P2.py
 ```
 
 # Bug

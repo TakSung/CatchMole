@@ -25,7 +25,8 @@ class GUIRoom:
         self.cursors = [False for _ in range(player_num)]
         self.obj = ObjectType.none
 
-    def set_cursor(self, on: bool, idx:int = 0):
+    def set_cursor(self, on: bool, idx: int = 0):
+        assert 0 <= idx < len(self.cursors)
         self.cursors[idx] = on
         self.change = True
 
@@ -62,16 +63,25 @@ class GUIRoom:
 
 
 class RoomManager:
-    def __init__(self, size: int = 3):
+    def __init__(self, size: Tuple[int, int] = (3, 3), player_num=1):
         self.size = size
-        self.rooms = [[GUIRoom(y, x) for x in range(size)] for y in range(size)]
-        self.cursor_x, self.cursor_y = 0, 0
-        self.set_cursor(0, 0)
+        self.rooms = [
+            [GUIRoom(y, x, player_num) for x in range(size[1])] for y in range(size[0])
+        ]
+        self.cursors: List[Tuple[int, int]] = [
+            (i // size[1], i % size[1]) for i in range(player_num)
+        ]
+        for i, cursor in enumerate(self.cursors):
+            self.set_cursor(*cursor, idx=i)
 
-    def set_cursor(self, y: int, x: int, idx:int = 0):
-        self.rooms[self.cursor_y][self.cursor_x].set_cursor(False)
-        self.cursor_x, self.cursor_y = x, y
-        self.rooms[y][x].set_cursor(True)
+    def set_cursor(self, y: int, x: int, idx=0):
+        assert 0 <= idx < len(self.cursors)
+        assert 0 <= y < self.size[0]
+        assert 0 <= x < self.size[1]
+        (o_y, o_x) = self.cursors[idx]
+        self.rooms[o_y][o_x].set_cursor(False, idx)
+        self.cursors[idx] = (y, x)
+        self.rooms[y][x].set_cursor(True, idx)
 
     def set_obj(self, y: int, x: int, type: ObjectType):
         self.rooms[y][x].set_obj(type)
@@ -82,67 +92,17 @@ class RoomManager:
         y,x위치, 룸의 존재하는 객체 종류, 커서의 존재여부
 
         Returns:
-            List[Tuple[int, int, ObjectType, bool]]: _description_ y, x, object_type, is_cursor
+            List[Tuple[int, int, ObjectType, List[bool]]]: _description_ y, x, object_type, cursors
         """
         changed_list = [
             (self.rooms[y][x].get_room())
-            for y in range(self.size)
-            for x in range(self.size)
+            for y in range(self.size[0])
+            for x in range(self.size[1])
             if self.rooms[y][x].is_change()
         ]
         return changed_list
 
     def check_room(self):
-        for y in range(self.size):
-            for x in range(self.size):
-                self.rooms[y][x].check_room()
-
-
-#
-
-
-class RoomManagerP2:
-    def __init__(self, size: int = 3):
-        self.size = size
-        self.rooms = [[GUIRoom(y, x, 2) for x in range(size)] for y in range(size)]
-        self.cursor_x1, self.cursor_y1 = 0, 0
-        self.cursor_x2, self.cursor_y2 = 0, 0
-
-    def set_cursor(
-        self,
-        y: int,
-        x: int,
-        idx:int
-    ):
-        if idx == 0:
-            self.rooms[self.cursor_y1][self.cursor_x1].set_cursor(False,idx)
-            self.cursor_x1, self.cursor_y1 = x, y
-            self.rooms[y][x].set_cursor(True,idx)
-        if idx == 1:
-            self.rooms[self.cursor_y2][self.cursor_x2].set_cursor(False,idx)
-            self.cursor_x2, self.cursor_y2 = x, y
-            self.rooms[y][x].set_cursor(True,idx)
-
-    def set_obj(self, y: int, x: int, type: ObjectType):
-        self.rooms[y][x].set_obj(type)
-
-    def get_changed_list(self) -> List[Tuple[int, int, ObjectType, bool]]:
-        """_summary_
-        룸에 있는 정보들을 튜플형태로 얻는다.
-        y,x위치, 룸의 존재하는 객체 종류, 커서의 존재여부
-
-        Returns:
-            List[Tuple[int, int, ObjectType, bool]]: _description_ y, x, object_type, is_cursor
-        """
-        changed_list = [
-            (self.rooms[y][x].get_room())
-            for y in range(self.size)
-            for x in range(self.size)
-            if self.rooms[y][x].is_change()
-        ]
-        return changed_list
-
-    def check_room(self):
-        for y in range(self.size):
-            for x in range(self.size):
+        for y in range(self.size[0]):
+            for x in range(self.size[1]):
                 self.rooms[y][x].check_room()

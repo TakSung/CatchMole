@@ -50,7 +50,7 @@ fps = 30
 
 game_screen = pg.display.set_mode((ALL_W, HEIGHT))
 satus_screen = pg.display.set_mode((ALL_W, STATUS))
-room_manager = RoomManager(4)
+room_manager = RoomManager((4, 4))
 
 
 pg.display.set_caption("Test")
@@ -196,14 +196,18 @@ def auto_raise():
         yr = random.randrange(0, 4)
         t = random.randrange(0, 1000)
         ic("raise mole", xr, yr)
-        if t < 200:
-            board.raise_obj(yr, xr, type=ObjectType.BOMB)
-        elif t < 400:
-            board.raise_obj(yr, xr, type=ObjectType.HACKER)
-        elif t < 951:
-            board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
-        else:
-            board.raise_obj(yr, xr, type=ObjectType.GOLD_MOLE)
+        try:
+
+            if t < 200:
+                board.raise_obj(yr, xr, type=ObjectType.BOMB)
+            elif t < 400:
+                board.raise_obj(yr, xr, type=ObjectType.HACKER)
+            elif t < 951:
+                board.raise_obj(yr, xr, type=ObjectType.BASIC_MOLE)
+            else:
+                board.raise_obj(yr, xr, type=ObjectType.GOLD_MOLE)
+        except:
+            pass
 
 
 timmer = 0
@@ -246,8 +250,8 @@ while True:
         room_manager.check_room()
 
         for item in chaged_rooms:
-            (y, x, type, cursor) = item
-            print_room(y, x, type, cursor)
+            (y, x, type, cursors) = item
+            print_room(y, x, type, cursors)
         updater.rend_effect()
         text_surface = my_font.render(f"Time : {timmer/10}", False, (0, 0, 0))
         pg.draw.rect(game_screen, WHITE, [800, 0, 200, 800], 1000)
